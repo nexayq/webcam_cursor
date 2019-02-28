@@ -3,6 +3,7 @@
 import cv2
 import numpy as np
 import pyautogui
+import time
 
 # disable closing of app when upper left corner is reached
 pyautogui.FAILSAFE = False
@@ -121,8 +122,10 @@ while True:
         #  cv2.imshow("Green", green)
         #  cv2.imshow("Green", green[0])
 
-        #  cv2.imshow("Green", green_mask)
+        cv2.imshow("Green", green_mask)
 
         key = cv2.waitKey(1)
         #  if key == 27:
             #  break
+
+        time.sleep(0.1)
