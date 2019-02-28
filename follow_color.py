@@ -4,6 +4,9 @@ import cv2
 import numpy as np
 import pyautogui
 
+# disable closing of app when upper left corner is reached
+pyautogui.FAILSAFE = False
+
 # init
 object_detected = 0
 noise_X = 1
