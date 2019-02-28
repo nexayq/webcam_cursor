@@ -35,7 +35,7 @@ while True:
 
         # Green color mask
         #  low_green  = np.array([25, 52, 72])
-        low_green  = np.array([25, 170, 72])
+        low_green  = np.array([25, 100, 72])
         #  high_green = np.array([102, 255, 255])
         high_green = np.array([42, 255, 255])
         green_mask = cv2.inRange(hsv_frame, low_green, high_green)
@@ -100,7 +100,7 @@ while True:
         #  cv2.imshow("Green", green)
         #  cv2.imshow("Green", green[0])
 
-        #  cv2.imshow("Green", green_mask)
+        cv2.imshow("Green", green_mask)
 
         key = cv2.waitKey(1)
         #  if key == 27:
