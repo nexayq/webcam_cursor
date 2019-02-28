@@ -2,9 +2,17 @@
 
 import cv2
 import numpy as np
+import pyautogui
+
+# init
+object_detected = 0
+noise_X = 1
+move_X_const  = 2
 
 # get video input from web camera
 cap = cv2.VideoCapture(0)
+cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH,1280)
+cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT,720)
 
 while True:
         _,frame = cap.read()
@@ -62,6 +70,26 @@ while True:
             print(cX, cY)
             print(green[cY,cX])
 
+            # move cursor
+            if object_detected == 1:
+                delta_X = cX - cX_prev
+                #  print(delta_X)
+                if (delta_X > noise_X):
+                    #  pyautogui.moveRel(-move_X, None)
+                    move_X = -delta_X*4
+                    pyautogui.moveRel(move_X, None)
+                    print("move_left: ", move_X)
+                    #  pass
+                elif (delta_X < -noise_X):
+                    #  pyautogui.moveRel(move_X, None)
+                    move_X = -delta_X*4
+                    pyautogui.moveRel(move_X, None)
+                    print("move_right: ", move_X)
+
+            object_detected = 1
+            cX_prev = cX
+            cY_prev = cY
+
         # save matrix to file
         #  np.savetxt('out.txt', green, fmt='%s')
 
@@ -70,8 +98,9 @@ while True:
         #  cv2.imshow("Red", red)
         #  cv2.imshow("Blue", blue)
         #  cv2.imshow("Green", green)
-        cv2.imshow("Green", green_mask)
         #  cv2.imshow("Green", green[0])
+
+        #  cv2.imshow("Green", green_mask)
 
         key = cv2.waitKey(1)
         #  if key == 27:
