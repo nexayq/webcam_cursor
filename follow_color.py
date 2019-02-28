@@ -7,6 +7,7 @@ import pyautogui
 # init
 object_detected = 0
 noise_X = 1
+noise_Y = 1
 move_X_const  = 2
 
 # get video input from web camera
@@ -72,6 +73,8 @@ while True:
 
             # move cursor
             if object_detected == 1:
+
+                # X-axis
                 delta_X = cX - cX_prev
                 #  print(delta_X)
                 if (delta_X > noise_X):
@@ -85,6 +88,21 @@ while True:
                     move_X = -delta_X*4
                     pyautogui.moveRel(move_X, None)
                     print("move_right: ", move_X)
+
+                # Y-axis
+                delta_Y = cY - cY_prev
+                print(delta_Y)
+                if (delta_Y > noise_Y):
+                    #  #  pyautogui.moveRel(-move_X, None)
+                    move_Y = delta_Y*4
+                    pyautogui.moveRel(None, move_Y)
+                    print("move_up: ", move_Y)
+                    #  #  pass
+                elif (delta_Y < -noise_Y):
+                    #  #  pyautogui.moveRel(move_X, None)
+                    move_Y = delta_Y*4
+                    pyautogui.moveRel(None, move_Y)
+                    print("move_down: ", move_Y)
 
             object_detected = 1
             cX_prev = cX
@@ -100,7 +118,7 @@ while True:
         #  cv2.imshow("Green", green)
         #  cv2.imshow("Green", green[0])
 
-        cv2.imshow("Green", green_mask)
+        #  cv2.imshow("Green", green_mask)
 
         key = cv2.waitKey(1)
         #  if key == 27:
