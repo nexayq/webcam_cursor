@@ -46,8 +46,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  self.calc_tax_button.clicked.connect(self.CalculateTax)
 
         # init variables
-        self.noise_X = 1
-        self.noise_Y = 1
+        #  self.noise_X = 1
+        #  self.noise_Y = 1
         self.cX_prev = 10000
         self.cY_prev = 10000
 
@@ -80,7 +80,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def run_timer(self):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.get_frame)
-        self.timer.start(2)
+        self.timer.start(0.1)
 
 
     # start webcam
@@ -145,14 +145,17 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             if self.moveCursorCheckBox.checkState():
                 move = 1
 
-            self.move_cursor(move, cX, cY)
+
+            filter_move = self.filterSpinBox.value()
+            speed       = self.speedSpinBox.value()
+            self.move_cursor(move, cX, cY, filter_move, speed)
 
         return green_mask
 
     # move cursor
-    def move_cursor(self, move, cX, cY):
-        noise_X = self.noise_X
-        noise_Y = self.noise_Y
+    def move_cursor(self, move, cX, cY, filter_move, speed):
+        noise_X = filter_move
+        noise_Y = filter_move
 
         delta_X = cX - self.cX_prev
         delta_Y = cY - self.cY_prev
@@ -163,14 +166,16 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         if (delta_X > noise_X and self.cX_prev != 10000):
             #  pyautogui.moveRel(-move_X, None)
             #  move_X = -delta_X*4
-            move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
+            #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
+            move_X = -delta_X*speed
             #  pyautogui.moveRel(move_X, None)
             print("move_left: ", move_X)
             #  pass
         elif (delta_X < -noise_X):
             #  pyautogui.moveRel(move_X, None)
             #  move_X = -delta_X*4
-            move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
+            #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
+            move_X = -delta_X*speed
             #  pyautogui.moveRel(move_X, None)
             print("move_right: ", move_X)
 
@@ -178,13 +183,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         print(delta_Y)
         if (delta_Y > noise_Y and self.cY_prev != 10000):
             #  #  pyautogui.moveRel(-move_X, None)
-            move_Y = delta_Y*4
+            move_Y = delta_Y*speed
             #  pyautogui.moveRel(None, move_Y)
             print("move_down: ", move_Y)
             #  #  pass
         elif (delta_Y < -noise_Y):
             #  #  pyautogui.moveRel(move_X, None)
-            move_Y = delta_Y*4
+            move_Y = delta_Y*speed
             #  pyautogui.moveRel(None, move_Y)
             print("move_up: ", move_Y)
 

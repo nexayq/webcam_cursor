@@ -94,14 +94,88 @@
    <widget class="QCheckBox" name="moveCursorCheckBox">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>50</y>
+      <x>470</x>
+      <y>20</y>
       <width>101</width>
       <height>19</height>
      </rect>
     </property>
     <property name="text">
      <string>Move Cursor</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="filterSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>50</y>
+      <width>53</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="maximum">
+     <number>10</number>
+    </property>
+    <property name="value">
+     <number>1</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="speedSpinBox">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>80</y>
+      <width>53</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>40</number>
+    </property>
+    <property name="value">
+     <number>4</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="filterLabel">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>53</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Filter movement</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelSpeed">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>80</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Cursor speed</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="dwellClickCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>20</y>
+      <width>101</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Dwell click</string>
     </property>
    </widget>
   </widget>
