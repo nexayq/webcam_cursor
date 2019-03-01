@@ -8,6 +8,7 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtCore import QTimer
 
 import cv2
+import numpy as np
 
 # Enter GUI filename
 qtCreatorFile = "main.ui"
@@ -61,6 +62,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  total_price = price + ((tax/100)*price)
         #  total_price_string = "The total price with tax is: " + str(total_price)
         #  self.results_window.setText(total_price_string)
+        return color
 
     def run_timer(self):
         self.timer = QTimer(self)
@@ -74,8 +76,18 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  while True:
         _,frame = self.cap.read()
         #  cv2.imshow("Frame", frame)
+        color = self.GetColor
         # change to be suitable for QImage
-        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        filtered_frame = self.follow_color(frame, color)
+        #  filtered_frame = filtered_frame.astype(np.uint8)
+        #  filtered_frame = filtered_frame.astype(np.uint8)
+        #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_BGR2RGB)
+        #  image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        #  print(type(filtered_frame))
+        #  print(filtered_frame.shape)
+        #  print(filtered_frame)
+        image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
+        #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_HSV2RGB)
         qimage = QtGui.QImage(image.data, image.shape[1], image.shape[0], QtGui.QImage.Format_RGB888)
         self.display_image(qimage)
 
@@ -84,6 +96,34 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.imageFrame.setPixmap(QtGui.QPixmap.fromImage(image))
         #  self.imageFrame.setScaledContents(True)
         #  self.imageFrame.show()
+
+    # follow specific color
+    def follow_color(self, frame, color):
+        # convert frame from BGR (RGB) format to HSV
+        hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        # Color mask
+        #  low_green  = np.array([25, 52, 72])
+        low_green  = np.array([25, 100, 72])
+        #  high_green = np.array([102, 255, 255])
+        high_green = np.array([42, 255, 255])
+        green_mask = cv2.inRange(hsv_frame, low_green, high_green)
+        green = cv2.bitwise_and(frame, frame, mask=green_mask)
+
+        # convert image to binary image
+        ret,thresh = cv2.threshold(green_mask,127,255,0)
+
+        # calculate moments of binary image
+        M = cv2.moments(thresh)
+
+        # calculate x,y coordinate of center
+        if(M["m00"] != 0):
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
+            print(cX, cY)
+            print(green[cY,cX])
+
+        return green_mask
 
 # run app
 if __name__ == "__main__":
