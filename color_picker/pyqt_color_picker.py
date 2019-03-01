@@ -9,6 +9,10 @@ from PyQt4.QtCore import QTimer
 
 import cv2
 import numpy as np
+import pyautogui
+
+# disable closing of app when upper left corner is reached
+pyautogui.FAILSAFE = False
 
 # Enter GUI filename
 qtCreatorFile = "main.ui"
@@ -34,15 +38,23 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.colorWidget.setPalette(p)
 
         self.cap = cv2.VideoCapture(0)
+        #  self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH,1280)
+        #  self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT,720)
         #  self.get_frame()
         self.run_timer()
         # call custom function "CalculateTax" when button is clicked
         #  self.calc_tax_button.clicked.connect(self.CalculateTax)
 
+        # init variables
+        self.noise_X = 1
+        self.noise_Y = 1
+        self.cX_prev = 10000
+        self.cY_prev = 10000
+
     # Custom function
     def GetColor(self):
         color = self.colorSpinBox.value()
-        print(color)
+        #  print(color)
         #  w = QtGui.QWidget()
         p = QtGui.QPalette()
         #  p.setColor(QtGui.QPalette.Window, Qt.black)
@@ -99,7 +111,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     # display image
     def display_image(self, image):
         self.imageFrame.setPixmap(QtGui.QPixmap.fromImage(image))
-        #  self.imageFrame.setScaledContents(True)
+        self.imageFrame.setScaledContents(True)
         #  self.imageFrame.show()
 
     # follow specific color
@@ -128,7 +140,61 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             print(cX, cY)
             print(green[cY,cX])
 
+            # move cursor if checkbox is checked
+            move = 0
+            if self.moveCursorCheckBox.checkState():
+                move = 1
+
+            self.move_cursor(move, cX, cY)
+
         return green_mask
+
+    # move cursor
+    def move_cursor(self, move, cX, cY):
+        noise_X = self.noise_X
+        noise_Y = self.noise_Y
+
+        delta_X = cX - self.cX_prev
+        delta_Y = cY - self.cY_prev
+        move_X = None
+        move_Y = None
+
+        #  print(delta_X)
+        if (delta_X > noise_X and self.cX_prev != 10000):
+            #  pyautogui.moveRel(-move_X, None)
+            #  move_X = -delta_X*4
+            move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
+            #  pyautogui.moveRel(move_X, None)
+            print("move_left: ", move_X)
+            #  pass
+        elif (delta_X < -noise_X):
+            #  pyautogui.moveRel(move_X, None)
+            #  move_X = -delta_X*4
+            move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
+            #  pyautogui.moveRel(move_X, None)
+            print("move_right: ", move_X)
+
+        # Y-axis
+        print(delta_Y)
+        if (delta_Y > noise_Y and self.cY_prev != 10000):
+            #  #  pyautogui.moveRel(-move_X, None)
+            move_Y = delta_Y*4
+            #  pyautogui.moveRel(None, move_Y)
+            print("move_down: ", move_Y)
+            #  #  pass
+        elif (delta_Y < -noise_Y):
+            #  #  pyautogui.moveRel(move_X, None)
+            move_Y = delta_Y*4
+            #  pyautogui.moveRel(None, move_Y)
+            print("move_up: ", move_Y)
+
+        if (move == 1) :
+            pyautogui.moveRel(move_X, None)
+            pyautogui.moveRel(None, move_Y)
+
+        #  object_detected = 1
+        self.cX_prev = cX
+        self.cY_prev = cY
 
 # run app
 if __name__ == "__main__":
