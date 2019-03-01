@@ -19,5 +19,5 @@ while(1):
     #  hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV)
     hsv = cv2.cvtColor(np.uint8([[bgr]]),cv2.COLOR_BGR2HSV)[0][0]
     print "BGR:", bgr
-    print("HSV:", hsv)
+    print "HSV:", hsv
     time.sleep(1)
