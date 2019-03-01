@@ -151,7 +151,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         M = cv2.moments(thresh)
 
         # calculate x,y coordinate of center
-        if(M["m00"] != 0):
+        #  if(M["m00"] != 0):
+        # filter small objects
+        if(M["m00"] > 40000):
+            #  print(M["m00"])
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
             #  print(cX, cY)
