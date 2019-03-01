@@ -13,6 +13,8 @@ import pyautogui
 
 # disable closing of app when upper left corner is reached
 pyautogui.FAILSAFE = False
+# improve speed drastically
+pyautogui.PAUSE = 0
 
 # Enter GUI filename
 qtCreatorFile = "main.ui"
@@ -163,6 +165,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
             filter_move = self.filterSpinBox.value()
             speed       = self.speedSpinBox.value()
+            # move cursor
             self.move_cursor(move, cX, cY, filter_move, speed)
         else:
             # false move
