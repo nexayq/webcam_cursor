@@ -64,6 +64,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  self.results_window.setText(total_price_string)
         return color
 
+    # run timer
     def run_timer(self):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.get_frame)
@@ -76,7 +77,11 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  while True:
         _,frame = self.cap.read()
         #  cv2.imshow("Frame", frame)
-        color = self.GetColor
+
+        # range for OpenCV H is 0-180, range for Qt H is 0-360
+        color = self.GetColor()/2
+        #  color = int(color)
+        #  print(color)
         # change to be suitable for QImage
         filtered_frame = self.follow_color(frame, color)
         #  filtered_frame = filtered_frame.astype(np.uint8)
@@ -104,9 +109,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # Color mask
         #  low_green  = np.array([25, 52, 72])
-        low_green  = np.array([25, 100, 72])
+        low_green  = np.array([color-10, 100, 72])
         #  high_green = np.array([102, 255, 255])
-        high_green = np.array([42, 255, 255])
+        high_green = np.array([color+10, 255, 255])
         green_mask = cv2.inRange(hsv_frame, low_green, high_green)
         green = cv2.bitwise_and(frame, frame, mask=green_mask)
 
