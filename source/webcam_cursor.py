@@ -144,11 +144,16 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def follow_color(self, frame, color):
         # convert frame from BGR (RGB) format to HSV
         hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        min_S = self.minS_SpinBox.value()
+        min_V = self.minV_SpinBox.value()
 
         # Color mask
         #  low_green  = np.array([25, 52, 72])
-        low_green  = np.array([color-10, 100, 72])
         #  high_green = np.array([102, 255, 255])
+        #  low_green  = np.array([color-10, 100, 72])
+        #  high_green = np.array([color+10, 255, 255])
+        #  print(min_S, min_V)
+        low_green  = np.array([color-10, min_S, min_V])
         high_green = np.array([color+10, 255, 255])
         green_mask = cv2.inRange(hsv_frame, low_green, high_green)
         green = cv2.bitwise_and(frame, frame, mask=green_mask)
