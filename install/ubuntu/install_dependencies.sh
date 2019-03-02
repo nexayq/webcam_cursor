@@ -12,8 +12,5 @@ sudo apt install python-qt4
 
 # PyAutoGUI
 sudo apt install python-pip
+sudo apt install python-xlib
 pip install pyautogui --user
-
-
-# run application
-../../color_picker/run.sh
