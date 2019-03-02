@@ -41,10 +41,11 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         self.cap = cv2.VideoCapture(0)
         if self.cap is None or not self.cap.isOpened():
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Warning)
+            msg = QtGui.QMessageBox()
+            msg.setIcon(QtGui.QMessageBox.Warning)
             msg.setText("Unable to open Camera!")
- 
+            msg.exec_()
+
         #  print(cv2.__version__[0])
         if int(cv2.__version__[0]) < 3:
             print("1280x720")
