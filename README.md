@@ -7,7 +7,7 @@ Move mouse cursor by following specific color from your webcam
 
 ## Ubuntu - install dependencies
     $ cd install/ubuntu
-    $ ./install_dependencies
+    $ ./install_dependencies.sh
 
 
 # Run
