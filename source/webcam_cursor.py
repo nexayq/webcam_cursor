@@ -131,8 +131,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print(filtered_frame)
         image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
         #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_HSV2RGB)
-        qimage = QtGui.QImage(image.data, image.shape[1], image.shape[0], QtGui.QImage.Format_RGB888)
-        self.display_image(qimage)
+        if image is not None:
+            qimage = QtGui.QImage(image.data, image.shape[1], image.shape[0], QtGui.QImage.Format_RGB888)
+            self.display_image(qimage)
 
     # display image
     def display_image(self, image):
