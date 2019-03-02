@@ -146,6 +146,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # convert image to binary image
         ret,thresh = cv2.threshold(green_mask,127,255,0)
+        #  contours,hierarchy = cv2.findContours(thresh, 1, 2)
+
+        #  print(len(contours))
 
         # calculate moments of binary image
         M = cv2.moments(thresh)
