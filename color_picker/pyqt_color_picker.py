@@ -40,8 +40,11 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.colorWidget.setPalette(p)
 
         self.cap = cv2.VideoCapture(0)
-        self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH,1280)
-        self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT,720)
+        #  print(cv2.__version__[0])
+        if int(cv2.__version__[0]) < 3:
+            print("1280x720")
+            self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH,1280)
+            self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT,720)
         #  self.get_frame()
         self.run_timer()
         # call custom function "CalculateTax" when button is clicked
