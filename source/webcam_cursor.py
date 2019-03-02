@@ -160,38 +160,48 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # convert image to binary image
         ret,thresh = cv2.threshold(green_mask,127,255,0)
-        #  contours,hierarchy = cv2.findContours(thresh, 1, 2)
+        contours,hierarchy = cv2.findContours(thresh, 1, 2)
 
         #  print(len(contours))
+        #find the biggest area
+        if(len(contours) > 0):
+            max_contour = max(contours, key = cv2.contourArea)
+            #  print(max_contour)
 
-        # calculate moments of binary image
-        M = cv2.moments(thresh)
-
-        # calculate x,y coordinate of center
-        #  if(M["m00"] != 0):
-        # filter small objects
-        if(M["m00"] > 40000):
+            # calculate moments of binary image
+            #  M = cv2.moments(thresh)
+            M = cv2.moments(max_contour)
             #  print(M["m00"])
-            cX = int(M["m10"] / M["m00"])
-            cY = int(M["m01"] / M["m00"])
-            #  print(cX, cY)
-            #  print(green[cY,cX])
 
-            # move cursor if checkbox is checked
-            move = 0
-            if self.moveCursorCheckBox.checkState():
-                move = 1
+            #  print(type(M))
+            #  print(len(M))
+            #  print(M)
+
+            # calculate x,y coordinate of center
+            #  if(M["m00"] != 0):
+            # filter small objects
+            if(M["m00"] > 500):
+                #  print(M["m00"])
+                cX = int(M["m10"] / M["m00"])
+                cY = int(M["m01"] / M["m00"])
+                #  print(cX, cY)
+                #  print(green[cY,cX])
+
+                # move cursor if checkbox is checked
+                move = 0
+                if self.moveCursorCheckBox.checkState():
+                    move = 1
 
 
-            filter_move = self.filterSpinBox.value()
-            speed       = self.speedSpinBox.value()
-            # move cursor
-            self.move_cursor(move, cX, cY, filter_move, speed)
-        else:
-            # false move
-            self.move_happened = 1
+                filter_move = self.filterSpinBox.value()
+                speed       = self.speedSpinBox.value()
+                # move cursor
+                self.move_cursor(move, cX, cY, filter_move, speed)
+            else:
+                # false move
+                self.move_happened = 1
 
-        return green_mask
+            return green_mask
 
     # move cursor
     def move_cursor(self, move, cX, cY, filter_move, speed):
