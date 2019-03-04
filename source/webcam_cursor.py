@@ -202,7 +202,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 # false move
                 self.move_happened = 1
 
-            return green_mask
+        return green_mask
 
     # move cursor
     def move_cursor(self, move, cX, cY, filter_move, speed):
