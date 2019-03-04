@@ -6,14 +6,23 @@ Move mouse cursor by following specific color from your webcam
 # Install
 
 ## Linux (tested on Ubuntu)
-    Download binary from Releases:
-[webcam_cursor_linux.run](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v1.0/webcam_cursor_linux.run)
+Download binary from Releases:  [webcam_cursor_linux.run](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v1.0/webcam_cursor_linux.run)
+
+
+Make file executable:\
+
+    $ chmod +x webcam_cursor_linux.run
+
+
+Run application:\
+
+    $ ./webcam_cursor_linux.run
+
 
 ## Windows
-    Download .exe from Releases:
-[webcam_cursor.exe](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v1.0/webcam_cursor.exe)
+Download .exe from Releases:  [webcam_cursor.exe](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v1.0/webcam_cursor.exe)
 
-
+\
 
 # Development
 
