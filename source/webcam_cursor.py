@@ -3,6 +3,8 @@
 #  https://www.pythonforengineers.com/your-first-gui-app-with-python-and-pyqt/
 
 import sys
+import os
+
 from PyQt4 import QtCore, QtGui, uic
 from PyQt4.QtCore import Qt
 from PyQt4.QtCore import QTimer
@@ -16,11 +18,23 @@ pyautogui.FAILSAFE = False
 # improve speed drastically
 pyautogui.PAUSE = 0
 
+# pyinstaller workaround
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 # Enter GUI filename
-qtCreatorFile = "main.ui"
+qtCreatorFile = resource_path("main.ui")
 
 # load GUI file
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
+
 
 # inherit GUI classes
 class MyApp(QtGui.QMainWindow, Ui_MainWindow):
