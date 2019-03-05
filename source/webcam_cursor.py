@@ -80,6 +80,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.move_happened = 0
         #  self.move_array_X = np.zeros(4)
         #  self.i = 0
+        self.state = 0
 
     # Custom function
     def GetColor(self):
@@ -224,7 +225,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     # move cursor
     def move_cursor(self, move, cX, cY, filter_move, speed):
         noise_X = filter_move
-        noise_Y = filter_move
+        #  noise_Y = filter_move
+        noise_Y = 0
 
         delta_X = cX - self.cX_prev
         delta_Y = cY - self.cY_prev
@@ -239,7 +241,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  move_X = -delta_X*4
             #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
             self.move_happened = 1
-            move_X = -delta_X*speed
+            #  move_X = -delta_X*speed
+            move_X = -delta_X
             #  pyautogui.moveRel(move_X, None)
             #  print("move_left: ", 1)
             #  pass
@@ -248,7 +251,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  move_X = -delta_X*4
             #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
             self.move_happened = 1
-            move_X = -delta_X*speed
+            #  move_X = -delta_X*speed
+            move_X = -delta_X
             #  pyautogui.moveRel(move_X, None)
             #  print("move_right: ", 1)
 
@@ -257,14 +261,16 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         if (delta_Y > noise_Y and self.cY_prev != 10000):
             #  #  pyautogui.moveRel(-move_X, None)
             self.move_happened = 1
-            move_Y = delta_Y*speed
+            #  move_Y = delta_Y*speed
+            move_Y = delta_Y
             #  pyautogui.moveRel(None, move_Y)
             #  print("move_down: ", move_Y)
             #  #  pass
         elif (delta_Y < -noise_Y):
             #  #  pyautogui.moveRel(move_X, None)
             self.move_happened = 1
-            move_Y = delta_Y*speed
+            #  move_Y = delta_Y*speed
+            move_Y = delta_Y
             #  pyautogui.moveRel(None, move_Y)
             #  print("move_up: ", move_Y)
 
@@ -284,23 +290,68 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  pyautogui.moveRel(None, move_Y)
 
             # debug to file
-            f_move_X = open( 'log/move_X.txt', 'a' )
-            f_move_X.write( 'move_X = ' + repr(int(move_X/speed)) + '\n' )
+            #  f_move_X = open( 'log/move_X.txt', 'a' )
+            #  f_move_X.write( 'move_X = ' + repr(int(move_X/speed)) + '\n' )
 
-            f_move_Y = open( 'log/move_Y.txt', 'a' )
-            f_move_Y.write( 'move_Y = ' + repr(int(move_Y/speed)) + '\n' )
+            #  f_move_Y = open( 'log/move_Y.txt', 'a' )
+            #  f_move_Y.write( 'move_Y = ' + repr(int(move_Y/speed)) + '\n' )
+            #  f_move_Y.close()
 
 
             #  print("move X:", int(move_X/speed))
-            #  print("move Y:", int(move_Y/speed))
-            pyautogui.moveRel(move_X, None)
-            pyautogui.moveRel(None, move_Y)
+            print("move Y:", move_Y)
+            pyautogui.moveRel(move_X*speed, None)
+            #  pyautogui.moveRel(None, move_Y)
+            self.filter_fsm(move_Y, speed)
 
         #  object_detected = 1
         self.cX_prev = cX
         self.cY_prev = cY
 
         return move_X, move_Y
+
+    # FSM for filtering dihtering moves
+    def filter_fsm(self, move_Y, speed):
+        # 0 state
+        if(self.state == 0):
+            if(abs(move_Y) > 1):
+                pyautogui.moveRel(None, move_Y*speed)
+            elif(move_Y == 1):
+                self.state = 1
+            elif(move_Y == -1):
+                self.state = -1
+
+        # 0 1
+        elif(self.state == 1):
+            if(move_Y == -1):
+                # 0 1 -1
+                #  f_move_Y = open( 'log/move_Y.txt', 'a' )
+                #  f_move_Y.write( 'filtered 0 1 -1' + '\n' )
+                print( 'filtered 0 -1 1' )
+                #  f_move_Y.close()
+                self.state = 255
+                pass
+            else:
+                pyautogui.moveRel(None, (1+move_Y)*speed)
+                self.state = 0
+
+        # 0 -1
+        elif(self.state == -1):
+            if(move_Y == 1):
+                # 0 -1 1
+                #  f_move_Y = open( 'log/move_Y.txt', 'a' )
+                #  f_move_Y.write( 'filtered 0 -1 1' + '\n' )
+                print( 'filtered 0 -1 1' )
+                self.state = 255
+                #  f_move_Y.close()
+                pass
+            else:
+                pyautogui.moveRel(None, (-1+move_Y)*speed)
+                self.state = 0
+
+        # 0 -1/1 1/-1 X - filter next input
+        elif(self.state == 255):
+            self.state = 0
 
 # run app
 if __name__ == "__main__":
