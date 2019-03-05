@@ -192,6 +192,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  M = cv2.moments(thresh)
             M = cv2.moments(max_contour)
             #  print(M["m00"])
+            area = cv2.contourArea(max_contour)
+            #  print(area)
 
             #  print(type(M))
             #  print(len(M))
@@ -200,7 +202,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             # calculate x,y coordinate of center
             #  if(M["m00"] != 0):
             # filter small objects
-            if(M["m00"] > 500):
+            #  if(area > 80):
+            if(M["m00"] > 300):
                 #  print(M["m00"])
                 cX = int(M["m10"] / M["m00"])
                 cY = int(M["m01"] / M["m00"])
