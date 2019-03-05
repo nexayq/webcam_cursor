@@ -62,7 +62,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         #  print(cv2.__version__[0])
         if int(cv2.__version__[0]) < 3:
-            print("1280x720")
+            pass
+            #  print("1280x720")
             #  self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH,1280)
             #  self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT,720)
         #  self.get_frame()
@@ -77,6 +78,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.cY_prev = 10000
         self.time_dwell_elapsed = 10000
         self.move_happened = 0
+        #  self.move_array_X = np.zeros(4)
+        #  self.i = 0
 
     # Custom function
     def GetColor(self):
@@ -225,8 +228,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         delta_X = cX - self.cX_prev
         delta_Y = cY - self.cY_prev
-        move_X = None
-        move_Y = None
+        #  move_X = None
+        #  move_Y = None
+        move_X = 0
+        move_Y = 0
 
         #  print(delta_X)
         if (delta_X > noise_X and self.cX_prev != 10000):
@@ -236,7 +241,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             self.move_happened = 1
             move_X = -delta_X*speed
             #  pyautogui.moveRel(move_X, None)
-            #  print("move_left: ", move_X)
+            #  print("move_left: ", 1)
             #  pass
         elif (delta_X < -noise_X):
             #  pyautogui.moveRel(move_X, None)
@@ -245,7 +250,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             self.move_happened = 1
             move_X = -delta_X*speed
             #  pyautogui.moveRel(move_X, None)
-            #  print("move_right: ", move_X)
+            #  print("move_right: ", 1)
 
         # Y-axis
         #  print(delta_Y)
@@ -263,7 +268,28 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  pyautogui.moveRel(None, move_Y)
             #  print("move_up: ", move_Y)
 
-        if (move == 1) :
+        #  move_array_X = np.zeros((4,1))
+        #  self.move_array_X = np.zeros((4,1))
+        #  print(self.move_array_X.shape)
+        #  self.move_array_X[1:] = self.move_array_X[0:-1]
+        #  self.move_array_X[0] = move_X
+        #  print(self.move_array_X.shape)
+        #  final_move_X = int(round(sum(self.move_array_X)))
+        #  self.move_array_X[self.i] = move_X
+        #  self.i = (self.i + 1)%4
+
+        if (move == 1 ) :
+            #  final_move_X = int(round(sum(self.move_array_X)/4))
+            #  pyautogui.moveRel(move_X, None)
+            #  pyautogui.moveRel(None, move_Y)
+
+            # debug to file
+            #  f = open( 'move.txt', 'a' )
+            #  f.write( 'move_X = ' + repr(int(move_X/speed)) + '\n' )
+            #  f.write( 'move_Y = ' + repr(int(move_Y/speed)) + '\n' )
+
+            #  print("move X:", int(move_X/speed))
+            #  print("move Y:", int(move_Y/speed))
             pyautogui.moveRel(move_X, None)
             pyautogui.moveRel(None, move_Y)
 
