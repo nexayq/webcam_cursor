@@ -80,7 +80,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.move_happened = 0
         #  self.move_array_X = np.zeros(4)
         #  self.i = 0
-        self.state = 0
+        self.state_X = 0
+        self.state_Y = 0
 
     # Custom function
     def GetColor(self):
@@ -225,8 +226,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     # move cursor
     def move_cursor(self, move, cX, cY, filter_move, speed):
         noise_X = filter_move
-        #  noise_Y = filter_move
-        noise_Y = 0
+        noise_Y = filter_move
+        #  noise_X = 0
+        #  noise_Y = 0
 
         delta_X = cX - self.cX_prev
         delta_Y = cY - self.cY_prev
@@ -300,9 +302,20 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
             #  print("move X:", int(move_X/speed))
             print("move Y:", move_Y)
+
+            #  if(noise_X == 0):
+                #  move_X_final = self.filter_fsm(self.state_X, move_X)
+                #  pyautogui.moveRel(move_X_final*speed, None)
+            #  else:
             pyautogui.moveRel(move_X*speed, None)
-            #  pyautogui.moveRel(None, move_Y)
-            self.filter_fsm(move_Y, speed)
+
+            #  print(noise_Y)
+            if(noise_Y == 0):
+                #  self.filter_fsm(move_Y, speed)
+                move_Y_final = self.filter_fsm(move_Y)
+                pyautogui.moveRel(None, move_Y_final*speed)
+            else:
+                pyautogui.moveRel(None, move_Y*speed)
 
         #  object_detected = 1
         self.cX_prev = cX
@@ -311,47 +324,60 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         return move_X, move_Y
 
     # FSM for filtering dihtering moves
-    def filter_fsm(self, move_Y, speed):
-        # 0 state
-        if(self.state == 0):
-            if(abs(move_Y) > 1):
-                pyautogui.moveRel(None, move_Y*speed)
-            elif(move_Y == 1):
-                self.state = 1
-            elif(move_Y == -1):
-                self.state = -1
+    def filter_fsm(self, move):
+        move_final = 0
+        print(self.state_Y)
+
+        # 0 self.state_Y
+        if(self.state_Y == 0):
+            if(abs(move) > 1):
+                #  pyautogui.moveRel(None, move*speed)
+                move_final = move
+            elif(move == 1):
+                self.state_Y = 1
+            elif(move == -1):
+                self.state_Y = -1
 
         # 0 1
-        elif(self.state == 1):
-            if(move_Y == -1):
+        elif(self.state_Y == 1):
+            if(move == -1):
                 # 0 1 -1
                 #  f_move_Y = open( 'log/move_Y.txt', 'a' )
                 #  f_move_Y.write( 'filtered 0 1 -1' + '\n' )
                 print( 'filtered 0 -1 1' )
                 #  f_move_Y.close()
-                self.state = 255
+                #  self.state_Y = 255
+                self.state_Y = 0
                 pass
             else:
-                pyautogui.moveRel(None, (1+move_Y)*speed)
-                self.state = 0
+                #  pyautogui.moveRel(None, (1+move)*speed)
+                move_final = 1 + move
+                self.state_Y = 0
 
         # 0 -1
-        elif(self.state == -1):
-            if(move_Y == 1):
+        elif(self.state_Y == -1):
+            if(move == 1):
                 # 0 -1 1
                 #  f_move_Y = open( 'log/move_Y.txt', 'a' )
                 #  f_move_Y.write( 'filtered 0 -1 1' + '\n' )
                 print( 'filtered 0 -1 1' )
-                self.state = 255
+                #  self.state_Y = 255
+                self.state_Y = 0
                 #  f_move_Y.close()
                 pass
             else:
-                pyautogui.moveRel(None, (-1+move_Y)*speed)
-                self.state = 0
+                #  pyautogui.moveRel(None, (-1+move)*speed)
+                move_final = -1 + move
+                self.state_Y = 0
 
         # 0 -1/1 1/-1 X - filter next input
-        elif(self.state == 255):
-            self.state = 0
+        elif(self.state_Y == 255):
+            self.state_Y = 0
+
+        #  print("FSM entered")
+        #  print(self.state_Y)
+        return move_final
+
 
 # run app
 if __name__ == "__main__":
