@@ -284,9 +284,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  pyautogui.moveRel(None, move_Y)
 
             # debug to file
-            #  f = open( 'move.txt', 'a' )
-            #  f.write( 'move_X = ' + repr(int(move_X/speed)) + '\n' )
-            #  f.write( 'move_Y = ' + repr(int(move_Y/speed)) + '\n' )
+            f_move_X = open( 'move_X.txt', 'a' )
+            f_move_X.write( 'move_X = ' + repr(int(move_X/speed)) + '\n' )
+
+            f_move_Y = open( 'move_Y.txt', 'a' )
+            f_move_Y.write( 'move_Y = ' + repr(int(move_Y/speed)) + '\n' )
+
 
             #  print("move X:", int(move_X/speed))
             #  print("move Y:", int(move_Y/speed))
