@@ -37,6 +37,9 @@ def resource_path(relative_path):
 # Enter GUI filename
 qtCreatorFile = resource_path("main.ui")
 
+# Pictures
+aruco_pic = resource_path("aruco_43.png")
+
 # load GUI file
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 
@@ -75,6 +78,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.run_timer()
         # call custom function "CalculateTax" when button is clicked
         #  self.calc_tax_button.clicked.connect(self.CalculateTax)
+
+        #  self.label_2.setGeometry(10, 10, 400, 100)
+        self.labelArUco.setScaledContents(True)
+        #  self.label_2.setPixmap(QtGui.QPixmap.scaled(70, 50, Qt.KeepAspectRatio))
+        self.labelArUco.setPixmap(QtGui.QPixmap(aruco_pic))
+        self.labelArUco.show()
 
         # init variables
         #  self.noise_X = 1

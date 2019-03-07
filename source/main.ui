@@ -39,10 +39,10 @@
    <widget class="QWidget" name="colorWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>20</y>
-      <width>51</width>
-      <height>21</height>
+      <x>310</x>
+      <y>60</y>
+      <width>81</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -302,6 +302,19 @@
     </property>
     <property name="text">
      <string>Algorithm</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelArUco">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>60</y>
+      <width>70</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
     </property>
    </widget>
   </widget>
