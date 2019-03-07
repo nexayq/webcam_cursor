@@ -140,8 +140,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  color = int(color)
         #  print(color)
         # change to be suitable for QImage
-        #  filtered_frame = self.follow_color(frame, color)
-        filtered_frame = frame
+        filtered_frame = self.follow_color(frame, color)
         #  filtered_frame = filtered_frame.astype(np.uint8)
         #  filtered_frame = filtered_frame.astype(np.uint8)
         #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_BGR2RGB)
@@ -149,13 +148,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print(type(filtered_frame))
         #  print(filtered_frame.shape)
         #  print(filtered_frame)
-        #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
-        gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        filtered_frame = self.detect_object(gray_image)
-        #  image = cv2.cvtColor(gray_image, cv2.COLOR_GRAY2RGB)
         image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
-        #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
-        #  image = filtered_frame
         #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_HSV2RGB)
         #  if image is not None:
         qimage = QtGui.QImage(image.data, image.shape[1], image.shape[0], QtGui.QImage.Format_RGB888)
@@ -166,92 +159,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.imageFrame.setPixmap(QtGui.QPixmap.fromImage(image))
         self.imageFrame.setScaledContents(True)
         #  self.imageFrame.show()
-
-    # detect object
-    def detect_object(self, gray_image):
-        # by default return original image
-        detect_image = gray_image
-
-        #  mod_image = cv2.GaussianBlur(gray_image, (5, 5), 0)
-        mod_image = gray_image
-        #  thresh = cv2.threshold(mod_image, 60, 255, cv2.THRESH_BINARY)[1]
-        #  edges = cv2.Canny(gray_image, 60, 150, apertureSize = 3)
-        #  lines = cv2.HoughLines(edges,1,np.pi/180,200)
-        #  cv2.imshow('hough',
-
-        # convert image to binary image
-        ret,thresh = cv2.threshold(mod_image,127,255,0)
-        contours,hierarchy = cv2.findContours(thresh, 1, 2)
-
-        for cntur in contours:
-            M = cv2.moments(cntur)
-
-            # filter small objects and large objects
-            if((M["m00"] > 2) and (M["m00"]<200000)):
-
-                # detect objects
-                # 0.01 - 0.05
-                approx = cv2.approxPolyDP(cntur, 0.09*cv2.arcLength(cntur,True),True)
-
-                # rectangle
-                if(len(approx)) == 4:
-                    print("Rectangle detected!")
-                    print(M["m00"])
-
-                    # w - width of the contour
-                    # h - height of the contour
-                    # x, y - contour location
-                    (x, y, w, h) = cv2.boundingRect(approx)
-                    cv2.drawContours(mod_image,[cntur],0,255,-1)
-                    detect_image = mod_image
-
-
-        return detect_image
-
-
-        #  print(len(contours))
-        #find the biggest area
-        #  if(len(contours) > 0):
-            #  max_contour = max(contours, key = cv2.contourArea)
-            #  #  print(max_contour)
-
-            #  # calculate moments of binary image
-            #  #  M = cv2.moments(thresh)
-            #  M = cv2.moments(max_contour)
-            #  #  print(M["m00"])
-            #  area = cv2.contourArea(max_contour)
-            #  #  print(area)
-
-            #  #  print(type(M))
-            #  #  print(len(M))
-            #  #  print(M)
-
-            #  # calculate x,y coordinate of center
-            #  #  if(M["m00"] != 0):
-            #  # filter small objects
-            #  #  if(area > 80):
-            #  if(M["m00"] > 300):
-                #  #  print(M["m00"])
-                #  cX = int(M["m10"] / M["m00"])
-                #  cY = int(M["m01"] / M["m00"])
-                #  #  print(cX, cY)
-                #  #  print(green[cY,cX])
-
-                #  # move cursor if checkbox is checked
-                #  move = 0
-                #  if self.moveCursorCheckBox.checkState():
-                    #  move = 1
-
-
-                #  filter_move = self.filterSpinBox.value()
-                #  speed       = self.speedSpinBox.value()
-                #  # move cursor
-                #  self.move_cursor(move, cX, cY, filter_move, speed)
-            #  else:
-                #  # false move
-                #  self.move_happened = 1
-
-        #  return green_mask
 
     # follow specific color
     def follow_color(self, frame, color):
