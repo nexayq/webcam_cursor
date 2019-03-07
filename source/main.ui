@@ -69,7 +69,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>140</y>
+      <y>150</y>
       <width>640</width>
       <height>480</height>
      </rect>
@@ -117,10 +117,10 @@
      <number>10</number>
     </property>
     <property name="value">
-     <number>2</number>
+     <number>1</number>
     </property>
    </widget>
-   <widget class="QSpinBox" name="speedSpinBox">
+   <widget class="QSpinBox" name="speedSpinBox_X">
     <property name="geometry">
      <rect>
       <x>580</x>
@@ -136,7 +136,7 @@
      <number>40</number>
     </property>
     <property name="value">
-     <number>4</number>
+     <number>10</number>
     </property>
    </widget>
    <widget class="QLabel" name="filterLabel">
@@ -152,7 +152,7 @@
      <string>Filter movement</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelSpeed">
+   <widget class="QLabel" name="labelSpeed_X">
     <property name="geometry">
      <rect>
       <x>470</x>
@@ -162,7 +162,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Cursor speed</string>
+     <string>Cursor speed X</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="dwellClickCheckBox">
@@ -178,7 +178,7 @@
      <string>Dwell click</string>
     </property>
     <property name="checked">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QSpinBox" name="minS_SpinBox">
@@ -239,6 +239,38 @@
      <string>Color Minimum Value (V)</string>
     </property>
    </widget>
+   <widget class="QLabel" name="labelSpeed_Y">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>110</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Cursor speed Y</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="speedSpinBox_Y">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>110</y>
+      <width>53</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>40</number>
+    </property>
+    <property name="value">
+     <number>10</number>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -246,7 +278,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>

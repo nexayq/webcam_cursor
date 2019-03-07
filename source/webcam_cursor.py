@@ -13,10 +13,15 @@ import cv2
 import numpy as np
 import pyautogui
 
+# aruco
+from cv2 import aruco
+NK_ARUCO_ID = 43
+
 # disable closing of app when upper left corner is reached
 pyautogui.FAILSAFE = False
 # improve speed drastically
 pyautogui.PAUSE = 0
+
 
 # pyinstaller workaround
 def resource_path(relative_path):
@@ -74,14 +79,15 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         # init variables
         #  self.noise_X = 1
         #  self.noise_Y = 1
-        self.cX_prev = 10000
-        self.cY_prev = 10000
+        self.cX_prev = 0
+        self.cY_prev = 0
         self.time_dwell_elapsed = 10000
         self.move_happened = 0
         #  self.move_array_X = np.zeros(4)
         #  self.i = 0
         self.state_X = 0
         self.state_Y = 0
+        self.first_data = 0
 
     # Custom function
     def GetColor(self):
@@ -136,12 +142,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  cv2.imshow("Frame", frame)
 
         # range for OpenCV H is 0-180, range for Qt H is 0-360
-        color = self.GetColor()/2
+        #  color = self.GetColor()/2
         #  color = int(color)
         #  print(color)
         # change to be suitable for QImage
         #  filtered_frame = self.follow_color(frame, color)
-        filtered_frame = frame
+        #  filtered_frame = frame
         #  filtered_frame = filtered_frame.astype(np.uint8)
         #  filtered_frame = filtered_frame.astype(np.uint8)
         #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_BGR2RGB)
@@ -150,22 +156,69 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print(filtered_frame.shape)
         #  print(filtered_frame)
         #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
-        gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        filtered_frame = self.detect_object(gray_image)
+        #  gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        aruco_frame = self.detect_aruco(frame)
+        image = cv2.cvtColor(aruco_frame, cv2.COLOR_BGR2RGB)
+        #  filtered_frame = self.detect_object(gray_image)
         #  image = cv2.cvtColor(gray_image, cv2.COLOR_GRAY2RGB)
-        image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
         #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
         #  image = filtered_frame
         #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_HSV2RGB)
-        #  if image is not None:
+    #  if image is not None:
         qimage = QtGui.QImage(image.data, image.shape[1], image.shape[0], QtGui.QImage.Format_RGB888)
         self.display_image(qimage)
+
 
     # display image
     def display_image(self, image):
         self.imageFrame.setPixmap(QtGui.QPixmap.fromImage(image))
         self.imageFrame.setScaledContents(True)
         #  self.imageFrame.show()
+
+
+    # detect aruco
+    def detect_aruco(self, frame):
+        # dictionary - 4x4 aruco images
+        aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_250)
+        #  aruco_dict = aruco.generateCustomDictionary(43,4)
+        #  print(aruco_dict)
+
+        # get gray picture
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        parameters =  aruco.DetectorParameters_create()
+
+        # get aruco frames
+        corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+        #  print(ids)
+
+        # append aruco detected markers on color frame
+        #  frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
+        frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
+
+        # get (x,y) of top left aruco corner
+        if ids is not None:
+            for i in range(len(ids)):
+                # follow only one id
+                if ids[i][0] == NK_ARUCO_ID:
+                    c = corners[i][0]
+                    x = c[0][0]
+                    y = c[0][1]
+                    print("c[" + str(i) + "] = " + str(c[i]))
+                    print("x = " + str(x))
+                    print("y = " + str(y))
+                    print("")
+
+                    # move cursor if checkbox is checked
+                    move = 0
+                    if self.moveCursorCheckBox.checkState():
+                        move = 1
+                    # move cursor
+                    self.move_cursor(move, x, y)
+
+        return frame_markers
+
+
 
     # detect object
     def detect_object(self, gray_image):
@@ -208,50 +261,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         return detect_image
 
-
-        #  print(len(contours))
-        #find the biggest area
-        #  if(len(contours) > 0):
-            #  max_contour = max(contours, key = cv2.contourArea)
-            #  #  print(max_contour)
-
-            #  # calculate moments of binary image
-            #  #  M = cv2.moments(thresh)
-            #  M = cv2.moments(max_contour)
-            #  #  print(M["m00"])
-            #  area = cv2.contourArea(max_contour)
-            #  #  print(area)
-
-            #  #  print(type(M))
-            #  #  print(len(M))
-            #  #  print(M)
-
-            #  # calculate x,y coordinate of center
-            #  #  if(M["m00"] != 0):
-            #  # filter small objects
-            #  #  if(area > 80):
-            #  if(M["m00"] > 300):
-                #  #  print(M["m00"])
-                #  cX = int(M["m10"] / M["m00"])
-                #  cY = int(M["m01"] / M["m00"])
-                #  #  print(cX, cY)
-                #  #  print(green[cY,cX])
-
-                #  # move cursor if checkbox is checked
-                #  move = 0
-                #  if self.moveCursorCheckBox.checkState():
-                    #  move = 1
-
-
-                #  filter_move = self.filterSpinBox.value()
-                #  speed       = self.speedSpinBox.value()
-                #  # move cursor
-                #  self.move_cursor(move, cX, cY, filter_move, speed)
-            #  else:
-                #  # false move
-                #  self.move_happened = 1
-
-        #  return green_mask
 
     # follow specific color
     def follow_color(self, frame, color):
@@ -309,18 +318,20 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                     move = 1
 
 
-                filter_move = self.filterSpinBox.value()
-                speed       = self.speedSpinBox.value()
                 # move cursor
-                self.move_cursor(move, cX, cY, filter_move, speed)
+                self.move_cursor(move, cX, cY)
             else:
                 # false move
                 self.move_happened = 1
 
         return green_mask
 
+
     # move cursor
-    def move_cursor(self, move, cX, cY, filter_move, speed):
+    def move_cursor(self, move, cX, cY):
+        filter_move = self.filterSpinBox.value()
+        speed_X = self.speedSpinBox_X.value()
+        speed_Y = self.speedSpinBox_Y.value()
         noise_X = filter_move
         noise_Y = filter_move
         #  noise_X = 0
@@ -328,13 +339,22 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         delta_X = cX - self.cX_prev
         delta_Y = cY - self.cY_prev
+
+        self.cX_prev = cX
+        self.cY_prev = cY
+
         #  move_X = None
         #  move_Y = None
         move_X = 0
         move_Y = 0
 
+        # there is no delta for first input data
+        if(self.first_data == 0):
+            self.first_data = 1
+            return move_X, move_Y
+
         #  print(delta_X)
-        if (delta_X > noise_X and self.cX_prev != 10000):
+        if (delta_X > noise_X):
             #  pyautogui.moveRel(-move_X, None)
             #  move_X = -delta_X*4
             #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
@@ -356,7 +376,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # Y-axis
         #  print(delta_Y)
-        if (delta_Y > noise_Y and self.cY_prev != 10000):
+        if (delta_Y > noise_Y):
             #  #  pyautogui.moveRel(-move_X, None)
             self.move_happened = 1
             #  move_Y = delta_Y*speed
@@ -397,25 +417,24 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
 
             #  print("move X:", int(move_X/speed))
-            print("move Y:", move_Y)
+            #  print("move Y:", move_Y)
 
             #  if(noise_X == 0):
                 #  move_X_final = self.filter_fsm(self.state_X, move_X)
                 #  pyautogui.moveRel(move_X_final*speed, None)
             #  else:
-            pyautogui.moveRel(move_X*speed, None)
+            pyautogui.moveRel(move_X*speed_X, None)
+            pyautogui.moveRel(None, move_Y*speed_Y)
 
             #  print(noise_Y)
-            if(noise_Y == 0):
-                #  self.filter_fsm(move_Y, speed)
-                move_Y_final = self.filter_fsm(move_Y)
-                pyautogui.moveRel(None, move_Y_final*speed)
-            else:
-                pyautogui.moveRel(None, move_Y*speed)
+            #  if(noise_Y == 0):
+                #  #  self.filter_fsm(move_Y, speed)
+                #  move_Y_final = self.filter_fsm(move_Y)
+                #  pyautogui.moveRel(None, move_Y_final*speed)
+            #  else:
+                #  pyautogui.moveRel(None, move_Y*speed)
 
         #  object_detected = 1
-        self.cX_prev = cX
-        self.cY_prev = cY
 
         return move_X, move_Y
 
