@@ -429,27 +429,29 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  print("move X:", int(move_X/speed))
             #  print("move Y:", move_Y)
 
-            #  if(noise_X == 0):
-                #  move_X_final = self.filter_fsm(self.state_X, move_X)
-                #  pyautogui.moveRel(move_X_final*speed, None)
-            #  else:
+            # filter X noise
+            if(noise_X == 0):
+                move_X_final = self.filter_fsm_X(move_X)
+                pyautogui.moveRel(move_X_final*speed_X, None)
+            else:
+                pyautogui.moveRel(move_X*speed_X, None)
             pyautogui.moveRel(move_X*speed_X, None)
-            pyautogui.moveRel(None, move_Y*speed_Y)
 
             #  print(noise_Y)
-            #  if(noise_Y == 0):
-                #  #  self.filter_fsm(move_Y, speed)
-                #  move_Y_final = self.filter_fsm(move_Y)
-                #  pyautogui.moveRel(None, move_Y_final*speed)
-            #  else:
-                #  pyautogui.moveRel(None, move_Y*speed)
+            if(noise_Y == 0):
+                #  self.filter_fsm(move_Y, speed)
+                move_Y_final = self.filter_fsm_Y(move_Y)
+                pyautogui.moveRel(None, move_Y_final*speed_Y)
+            else:
+                pyautogui.moveRel(None, move_Y*speed_Y)
+            #  pyautogui.moveRel(None, move_Y*speed_Y)
 
         #  object_detected = 1
 
         return move_X, move_Y
 
-    # FSM for filtering dihtering moves
-    def filter_fsm(self, move):
+    # FSM for filtering dihtering moves - Y
+    def filter_fsm_Y(self, move):
         move_final = 0
         print(self.state_Y)
 
@@ -469,7 +471,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 # 0 1 -1
                 #  f_move_Y = open( 'log/move_Y.txt', 'a' )
                 #  f_move_Y.write( 'filtered 0 1 -1' + '\n' )
-                print( 'filtered 0 -1 1' )
+                print( 'Y filtered 0 -1 1' )
                 #  f_move_Y.close()
                 #  self.state_Y = 255
                 self.state_Y = 0
@@ -485,7 +487,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 # 0 -1 1
                 #  f_move_Y = open( 'log/move_Y.txt', 'a' )
                 #  f_move_Y.write( 'filtered 0 -1 1' + '\n' )
-                print( 'filtered 0 -1 1' )
+                print( 'Y filtered 0 -1 1' )
                 #  self.state_Y = 255
                 self.state_Y = 0
                 #  f_move_Y.close()
@@ -503,6 +505,61 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print(self.state_Y)
         return move_final
 
+
+    # FSM for filtering dihtering moves - X
+    def filter_fsm_X(self, move):
+        move_final = 0
+        print(self.state_X)
+
+        # 0 self.state_X
+        if(self.state_X == 0):
+            if(abs(move) > 1):
+                #  pyautogui.moveRel(None, move*speed)
+                move_final = move
+            elif(move == 1):
+                self.state_X = 1
+            elif(move == -1):
+                self.state_X = -1
+
+        # 0 1
+        elif(self.state_X == 1):
+            if(move == -1):
+                # 0 1 -1
+                #  f_move_X = open( 'log/move_X.txt', 'a' )
+                #  f_move_X.write( 'filtered 0 1 -1' + '\n' )
+                print( 'X filtered 0 -1 1' )
+                #  f_move_X.close()
+                #  self.state_X = 255
+                self.state_X = 0
+                pass
+            else:
+                #  pyautogui.moveRel(None, (1+move)*speed)
+                move_final = 1 + move
+                self.state_X = 0
+
+        # 0 -1
+        elif(self.state_X == -1):
+            if(move == 1):
+                # 0 -1 1
+                #  f_move_X = open( 'log/move_X.txt', 'a' )
+                #  f_move_X.write( 'filtered 0 -1 1' + '\n' )
+                print( 'X filtered 0 -1 1' )
+                #  self.state_X = 255
+                self.state_X = 0
+                #  f_move_X.close()
+                pass
+            else:
+                #  pyautogui.moveRel(None, (-1+move)*speed)
+                move_final = -1 + move
+                self.state_X = 0
+
+        # 0 -1/1 1/-1 X - filter next input
+        elif(self.state_X == 255):
+            self.state_X = 0
+
+        #  print("FSM entered")
+        #  print(self.state_X)
+        return move_final
 
 # run app
 if __name__ == "__main__":
