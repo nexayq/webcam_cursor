@@ -39,10 +39,10 @@
    <widget class="QWidget" name="colorWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>230</x>
       <y>20</y>
-      <width>120</width>
-      <height>80</height>
+      <width>51</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -81,7 +81,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>70</x>
       <y>20</y>
       <width>111</width>
       <height>16</height>
@@ -94,7 +94,7 @@
    <widget class="QCheckBox" name="moveCursorCheckBox">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>510</x>
       <y>20</y>
       <width>111</width>
       <height>19</height>
@@ -107,7 +107,7 @@
    <widget class="QSpinBox" name="filterSpinBox">
     <property name="geometry">
      <rect>
-      <x>580</x>
+      <x>620</x>
       <y>50</y>
       <width>53</width>
       <height>22</height>
@@ -123,7 +123,7 @@
    <widget class="QSpinBox" name="speedSpinBox_X">
     <property name="geometry">
      <rect>
-      <x>580</x>
+      <x>620</x>
       <y>80</y>
       <width>53</width>
       <height>22</height>
@@ -142,7 +142,7 @@
    <widget class="QLabel" name="filterLabel">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>510</x>
       <y>53</y>
       <width>121</width>
       <height>21</height>
@@ -155,7 +155,7 @@
    <widget class="QLabel" name="labelSpeed_X">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>510</x>
       <y>80</y>
       <width>121</width>
       <height>21</height>
@@ -168,7 +168,7 @@
    <widget class="QCheckBox" name="dwellClickCheckBox">
     <property name="geometry">
      <rect>
-      <x>610</x>
+      <x>650</x>
       <y>20</y>
       <width>101</width>
       <height>19</height>
@@ -242,7 +242,7 @@
    <widget class="QLabel" name="labelSpeed_Y">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>510</x>
       <y>110</y>
       <width>121</width>
       <height>21</height>
@@ -255,7 +255,7 @@
    <widget class="QSpinBox" name="speedSpinBox_Y">
     <property name="geometry">
      <rect>
-      <x>580</x>
+      <x>620</x>
       <y>110</y>
       <width>53</width>
       <height>22</height>
@@ -269,6 +269,39 @@
     </property>
     <property name="value">
      <number>10</number>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="algorithmComboBox">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>20</y>
+      <width>81</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>ArUco</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Color</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="algorithmLabel">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>20</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Algorithm</string>
     </property>
    </widget>
   </widget>

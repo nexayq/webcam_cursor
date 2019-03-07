@@ -141,10 +141,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         _,frame = self.cap.read()
         #  cv2.imshow("Frame", frame)
 
-        # range for OpenCV H is 0-180, range for Qt H is 0-360
-        #  color = self.GetColor()/2
-        #  color = int(color)
-        #  print(color)
+        # get user selected algorithm
+        algorithm = self.algorithmComboBox.currentText()
+        #  print("Combo box: " + algorithm)
+
         # change to be suitable for QImage
         #  filtered_frame = self.follow_color(frame, color)
         #  filtered_frame = frame
@@ -157,8 +157,18 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print(filtered_frame)
         #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
         #  gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        aruco_frame = self.detect_aruco(frame)
-        image = cv2.cvtColor(aruco_frame, cv2.COLOR_BGR2RGB)
+        if(algorithm == "ArUco"):
+            aruco_frame = self.detect_aruco(frame)
+            image = cv2.cvtColor(aruco_frame, cv2.COLOR_BGR2RGB)
+        elif(algorithm == "Color"):
+            # range for OpenCV H is 0-180, range for Qt H is 0-360
+            color = self.GetColor()/2
+            #  color = int(color)
+            #  print(color)
+            filtered_frame = self.follow_color(frame, color)
+            image = cv2.cvtColor(filtered_frame, cv2.COLOR_BGR2RGB)
+        else:
+            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         #  filtered_frame = self.detect_object(gray_image)
         #  image = cv2.cvtColor(gray_image, cv2.COLOR_GRAY2RGB)
         #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
