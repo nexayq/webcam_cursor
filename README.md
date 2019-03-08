@@ -1,7 +1,8 @@
 # Webcam Cursor
-Move mouse cursor by following specific color from your webcam
+Move mouse cursor by following ArUco symbol 43(4x4) or specific color from your webcam
 
-![Screenshot 1][screenshot]
+![Screenshot - ArUco symbol 43 tracking][aruco_screenshot]
+![Screenshot - Custom Color tracking][color_screenshot]
 
 # Install
 
@@ -35,4 +36,5 @@ Download .exe from Releases:  [webcam_cursor.exe](https://github.com/nexayq/webc
     $ cd source/
     $ ./run.sh
 
-[screenshot]:       https://github.com/nexayq/follow_color/blob/master/data/screenshots/screenshot_move_cursor.jpg
+[aruco_screenshot]:       https://github.com/nexayq/follow_color/blob/master/data/screenshots/aruco_screenshot.png
+[color_screenshot]:       https://github.com/nexayq/follow_color/blob/master/data/screenshots/color_screenshot.png
