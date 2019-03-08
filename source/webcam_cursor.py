@@ -102,9 +102,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.state_Y = 0
         self.first_data = 0
 
-        # filter cursor array inputs
-        self.filter_cursor_X = np.zeros(4)
-        self.filter_cursor_Y = np.zeros(4)
+        # filter cursor array inputs - max size
+        self.filter_cursor_X = np.zeros(100)
+        self.filter_cursor_Y = np.zeros(100)
 
     # Custom function
     def GetColor(self):
@@ -231,10 +231,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                     c = corners[i][0]
                     x = c[0][0]
                     y = c[0][1]
-                    print("c[" + str(i) + "] = " + str(c[i]))
-                    print("x = " + str(x))
-                    print("y = " + str(y))
-                    print("")
+                    #  print("c[" + str(i) + "] = " + str(c[i]))
+                    #  print("x = " + str(x))
+                    #  print("y = " + str(y))
+                    #  print("")
 
                     # move cursor if checkbox is checked
                     move = 0
@@ -361,6 +361,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         speed_Y = self.speedSpinBox_Y.value()
         noise_X = filter_move
         noise_Y = filter_move
+        #  noise_Y = (filter_move-1) if (filter_move>0) else 0
         #  noise_X = 0
         #  noise_Y = 0
 
@@ -454,8 +455,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 #  pyautogui.moveRel(move_X*speed_X, None)
             #  pyautogui.moveRel(move_X*speed_X, None)
 
-            move_X_final = self.digital_filter_cursor_X(move_X)
-            pyautogui.moveRel(int(round(move_X_final*speed_X)), None)
+            move_X_final = self.digital_filter_cursor_X(move_X*speed_X)
+            pyautogui.moveRel(int(round(move_X_final)), None)
 
             #  print(noise_Y)
             #  if(noise_Y == 0):
@@ -465,8 +466,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  else:
                 #  pyautogui.moveRel(None, move_Y*speed_Y)
 
-            move_Y_final = self.digital_filter_cursor_Y(move_Y)
-            pyautogui.moveRel(None, int(round(move_Y*speed_Y)))
+            move_Y_final = self.digital_filter_cursor_Y(move_Y*speed_Y)
+            pyautogui.moveRel(None, int(round(move_Y_final)))
 
         #  object_detected = 1
 
@@ -587,18 +588,25 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     # Digital filter for cursor movement X
     def digital_filter_cursor_X(self, dx):
         # filter coefficients
-        c = np.array([0.25, 0.25, 0.25, 0.25])
+        #  c = np.array([0.25, 0.25, 0.25, 0.25])
+        #  c = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
+        #  numtaps = 20
+        numtaps = self.filterSpinBox_X.value()
+        #  f = 0.2
+        f = 0.1
+        c = signal.firwin(numtaps, f)
         filter_size = len(c)
 
         # shift in first element
         self.filter_cursor_X = np.append([dx], self.filter_cursor_X)
         # delete last element
-        self.filter_cursor_X = self.filter_cursor_X[:-1]
+        #  self.filter_cursor_X = self.filter_cursor_X[:-1]
 
         # calculate output value
         x_out = 0
         for i in range(0, filter_size):
             x_out = x_out + self.filter_cursor_X[i] * c[i]
+        print(x_out)
 
         return x_out
 
@@ -606,18 +614,26 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     # Digital filter for cursor movement Y
     def digital_filter_cursor_Y(self, dy):
         # filter coefficients
-        c = np.array([0.25, 0.25, 0.25, 0.25])
+        #  c = np.array([0.25, 0.25, 0.25, 0.25])
+        #  c = 2*np.array([0.2, 0.2, 0.2, 0.2, 0.2])
+        #  numtaps = 20
+        numtaps = self.filterSpinBox_Y.value()
+        #  f = 0.2
+        f = 0.1
+        c = signal.firwin(numtaps, f)
         filter_size = len(c)
 
         # shift in first element
         self.filter_cursor_Y = np.append([dy], self.filter_cursor_Y)
         # delete last element
-        self.filter_cursor_Y = self.filter_cursor_Y[:-1]
+        #  self.filter_cursor_Y = self.filter_cursor_Y[:-1]
 
         # calculate output value
         y_out = 0
         for i in range(0, filter_size):
             y_out = y_out + self.filter_cursor_Y[i] * c[i]
+        print(y_out)
+        print
 
         return y_out
 
