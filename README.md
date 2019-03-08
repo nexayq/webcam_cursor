@@ -19,7 +19,7 @@ In order to use ArUco algorithm you need to download and print ArUco 4x4 symbol 
 
 PDF file with ArUco 4x4 symbol 43 various sizes can be downloaded and printed from [PDF_Aruco_43](https://github.com/nexayq/webcam_cursor/blob/master/data/aruco_markers/aruco_43_4x4/aruco_all_dimensions.pdf)
 
-You can get custom sizes from link: [ArUco symbols](http://chev.me/arucogen/)
+You can get custom sizes from link: [ArUco Symbols](http://chev.me/arucogen/)
 
 Specify Dictionary: 4x4
 
