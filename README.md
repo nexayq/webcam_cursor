@@ -1,12 +1,17 @@
 # Webcam Cursor
 Move mouse cursor by following ArUco symbol 43(4x4) or specific color from your webcam
 
-
+# Screenshots
+<p align="center">
 ArUco symbol 43 tracking
+</p>
+
 ![Screenshot - ArUco symbol 43 tracking][aruco_screenshot]
 
-
+<p align="center">
 Custom Color tracking
+</p>
+
 ![Screenshot - Custom Color tracking][color_screenshot]
 
 
