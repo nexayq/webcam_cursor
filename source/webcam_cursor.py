@@ -621,6 +621,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  f = 0.2
         f = 0.1
         c = signal.firwin(numtaps, f)
+        #  print(c)
         filter_size = len(c)
 
         # shift in first element
