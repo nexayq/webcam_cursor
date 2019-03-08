@@ -9,7 +9,7 @@ Move mouse cursor by following ArUco symbol 43(4x4) or specific color from your 
 ![Screenshot - Aruco symbol 43 tracking][aruco_screenshot]
 
 <p align="center">
-Custom Color tracking
+    Custom Color tracking
 </p>
 
 ![Screenshot - Custom Color tracking][color_screenshot]
@@ -24,6 +24,8 @@ Specify Dictionary: 4x4
 Specify Marker ID: 43
 
 Use wanted marker size
+
+![Screenshot - Aruco 43 4x4][aruco_symbol]
 
 # Color algorithm
 Specify color you want to track in HSV domain.
@@ -65,5 +67,7 @@ Download .exe from Releases:  [webcam_cursor.exe](https://github.com/nexayq/webc
     $ cd source/
     $ ./run.sh
 
-[aruco_screenshot]:       https://github.com/nexayq/follow_color/blob/master/data/screenshots/aruco_screenshot.png
-[color_screenshot]:       https://github.com/nexayq/follow_color/blob/master/data/screenshots/color_screenshot.png
+[aruco_screenshot]:       https://github.com/nexayq/webcam_cursor/blob/master/data/screenshots/aruco_screenshot.png
+[color_screenshot]:       https://github.com/nexayq/webcam_cursor/blob/master/data/screenshots/color_screenshot.png
+
+[aruco_symbol]:           https://github.com/nexayq/webcam_cursor/blob/master/source/aruco_43.png
