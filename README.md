@@ -17,7 +17,9 @@ Move mouse cursor by following ArUco symbol 43(4x4) or specific color from your 
 # ArUco algorithm
 In order to use ArUco algorithm you need to download and print ArUco 4x4 symbol 43 (looks like "IF")
 
-You can get this symbol from link: [ArUco 43 (4x4)](http://chev.me/arucogen/)
+Pdf file with ArUco 4x4 symbol 43 various sizes can be downloaded and printed from [pdf_Aruco_43](https://github.com/nexayq/webcam_cursor/blob/master/data/aruco_markers/aruco_43_4x4/aruco_all_dimensions.pdf)
+
+You can get custom sizes from link: [ArUco 43 (4x4)](http://chev.me/arucogen/)
 
 Specify Dictionary: 4x4
 
