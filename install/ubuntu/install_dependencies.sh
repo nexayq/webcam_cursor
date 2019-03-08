@@ -18,4 +18,4 @@ pip2 install pyautogui --user
 # ArUco
 sudo apt install libeigen3-dev
 # pip2 install aruco --user
-pip2 install opencv-contrib-python
+pip2 install opencv-contrib-python --user
