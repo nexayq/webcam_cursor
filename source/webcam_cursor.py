@@ -444,7 +444,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 pyautogui.moveRel(move_X_final*speed_X, None)
             else:
                 pyautogui.moveRel(move_X*speed_X, None)
-            pyautogui.moveRel(move_X*speed_X, None)
+            #  pyautogui.moveRel(move_X*speed_X, None)
 
             #  print(noise_Y)
             if(noise_Y == 0):
