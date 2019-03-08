@@ -17,6 +17,10 @@ import pyautogui
 from cv2 import aruco
 NK_ARUCO_ID = 43
 
+# temp for calculating FIR coefficients
+from scipy import signal
+
+
 # disable closing of app when upper left corner is reached
 pyautogui.FAILSAFE = False
 # improve speed drastically
@@ -97,6 +101,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.state_X = 0
         self.state_Y = 0
         self.first_data = 0
+
+        # filter cursor array inputs
+        self.filter_cursor_X = np.zeros(4)
+        self.filter_cursor_Y = np.zeros(4)
 
     # Custom function
     def GetColor(self):
@@ -439,21 +447,26 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  print("move Y:", move_Y)
 
             # filter X noise
-            if(noise_X == 0):
-                move_X_final = self.filter_fsm_X(move_X)
-                pyautogui.moveRel(move_X_final*speed_X, None)
-            else:
-                pyautogui.moveRel(move_X*speed_X, None)
+            #  if(noise_X == 0):
+                #  move_X_final = self.filter_fsm_X(move_X)
+                #  pyautogui.moveRel(move_X_final*speed_X, None)
+            #  else:
+                #  pyautogui.moveRel(move_X*speed_X, None)
             #  pyautogui.moveRel(move_X*speed_X, None)
 
+            move_X_final = self.digital_filter_cursor_X(move_X)
+            pyautogui.moveRel(int(round(move_X_final*speed_X)), None)
+
             #  print(noise_Y)
-            if(noise_Y == 0):
-                #  self.filter_fsm(move_Y, speed)
-                move_Y_final = self.filter_fsm_Y(move_Y)
-                pyautogui.moveRel(None, move_Y_final*speed_Y)
-            else:
-                pyautogui.moveRel(None, move_Y*speed_Y)
-            #  pyautogui.moveRel(None, move_Y*speed_Y)
+            #  if(noise_Y == 0):
+                #  #  self.filter_fsm(move_Y, speed)
+                #  move_Y_final = self.filter_fsm_Y(move_Y)
+                #  pyautogui.moveRel(None, move_Y_final*speed_Y)
+            #  else:
+                #  pyautogui.moveRel(None, move_Y*speed_Y)
+
+            move_Y_final = self.digital_filter_cursor_Y(move_Y)
+            pyautogui.moveRel(None, int(round(move_Y*speed_Y)))
 
         #  object_detected = 1
 
@@ -569,6 +582,44 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print("FSM entered")
         #  print(self.state_X)
         return move_final
+
+
+    # Digital filter for cursor movement X
+    def digital_filter_cursor_X(self, dx):
+        # filter coefficients
+        c = np.array([0.25, 0.25, 0.25, 0.25])
+        filter_size = len(c)
+
+        # shift in first element
+        self.filter_cursor_X = np.append([dx], self.filter_cursor_X)
+        # delete last element
+        self.filter_cursor_X = self.filter_cursor_X[:-1]
+
+        # calculate output value
+        x_out = 0
+        for i in range(0, filter_size):
+            x_out = x_out + self.filter_cursor_X[i] * c[i]
+
+        return x_out
+
+
+    # Digital filter for cursor movement Y
+    def digital_filter_cursor_Y(self, dy):
+        # filter coefficients
+        c = np.array([0.25, 0.25, 0.25, 0.25])
+        filter_size = len(c)
+
+        # shift in first element
+        self.filter_cursor_Y = np.append([dy], self.filter_cursor_Y)
+        # delete last element
+        self.filter_cursor_Y = self.filter_cursor_Y[:-1]
+
+        # calculate output value
+        y_out = 0
+        for i in range(0, filter_size):
+            y_out = y_out + self.filter_cursor_Y[i] * c[i]
+
+        return y_out
 
 # run app
 if __name__ == "__main__":
