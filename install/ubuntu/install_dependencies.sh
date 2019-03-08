@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# stop script when exit occurs
+# stop script if exit occurs
 set -e
 
 # OpenCV
@@ -17,4 +17,5 @@ pip2 install pyautogui --user
 
 # ArUco
 sudo apt install libeigen3-dev
-pip2 install aruco --user
+# pip2 install aruco --user
+pip2 install opencv-contrib-python
