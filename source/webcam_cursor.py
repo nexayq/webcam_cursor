@@ -381,6 +381,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             self.first_data = 1
             return move_X, move_Y
 
+        print(delta_X)
+
         #  print(delta_X)
         if (delta_X > noise_X):
             #  pyautogui.moveRel(-move_X, None)
@@ -388,7 +390,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
             self.move_happened = 1
             #  move_X = -delta_X*speed
-            move_X = -delta_X
+            move_X = -(delta_X-noise_X)
             #  pyautogui.moveRel(move_X, None)
             #  print("move_left: ", 1)
             #  pass
@@ -398,17 +400,18 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
             self.move_happened = 1
             #  move_X = -delta_X*speed
-            move_X = -delta_X
+            move_X = -(delta_X-noise_X)
             #  pyautogui.moveRel(move_X, None)
             #  print("move_right: ", 1)
 
         # Y-axis
-        #  print(delta_Y)
+        print(delta_Y)
+        print
         if (delta_Y > noise_Y):
             #  #  pyautogui.moveRel(-move_X, None)
             self.move_happened = 1
             #  move_Y = delta_Y*speed
-            move_Y = delta_Y
+            move_Y = delta_Y-noise_Y
             #  pyautogui.moveRel(None, move_Y)
             #  print("move_down: ", move_Y)
             #  #  pass
@@ -416,7 +419,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  #  pyautogui.moveRel(move_X, None)
             self.move_happened = 1
             #  move_Y = delta_Y*speed
-            move_Y = delta_Y
+            move_Y = delta_Y-noise_Y
             #  pyautogui.moveRel(None, move_Y)
             #  print("move_up: ", move_Y)
 
@@ -592,21 +595,27 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  c = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
         #  numtaps = 20
         numtaps = self.filterSpinBox_X.value()
-        #  f = 0.2
-        f = 0.1
-        c = signal.firwin(numtaps, f)
-        filter_size = len(c)
 
-        # shift in first element
-        self.filter_cursor_X = np.append([dx], self.filter_cursor_X)
-        # delete last element
-        #  self.filter_cursor_X = self.filter_cursor_X[:-1]
+        # no filter
+        if(numtaps == 0):
+            x_out = dx
+        # FIR filter
+        else:
+            #  f = 0.2
+            f = 0.1
+            c = signal.firwin(numtaps, f)
+            filter_size = len(c)
 
-        # calculate output value
-        x_out = 0
-        for i in range(0, filter_size):
-            x_out = x_out + self.filter_cursor_X[i] * c[i]
-        print(x_out)
+            # shift in first element
+            self.filter_cursor_X = np.append([dx], self.filter_cursor_X)
+            # delete last element
+            #  self.filter_cursor_X = self.filter_cursor_X[:-1]
+
+            # calculate output value
+            x_out = 0
+            for i in range(0, filter_size):
+                x_out = x_out + self.filter_cursor_X[i] * c[i]
+            #  print(x_out)
 
         return x_out
 
@@ -618,23 +627,29 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  c = 2*np.array([0.2, 0.2, 0.2, 0.2, 0.2])
         #  numtaps = 20
         numtaps = self.filterSpinBox_Y.value()
-        #  f = 0.2
-        f = 0.1
-        c = signal.firwin(numtaps, f)
-        #  print(c)
-        filter_size = len(c)
 
-        # shift in first element
-        self.filter_cursor_Y = np.append([dy], self.filter_cursor_Y)
-        # delete last element
-        #  self.filter_cursor_Y = self.filter_cursor_Y[:-1]
+        # no filter
+        if(numtaps == 0):
+            y_out = dy
+        # FIR filter
+        else:
+            #  f = 0.2
+            f = 0.1
+            c = signal.firwin(numtaps, f)
+            #  print(c)
+            filter_size = len(c)
 
-        # calculate output value
-        y_out = 0
-        for i in range(0, filter_size):
-            y_out = y_out + self.filter_cursor_Y[i] * c[i]
-        print(y_out)
-        print
+            # shift in first element
+            self.filter_cursor_Y = np.append([dy], self.filter_cursor_Y)
+            # delete last element
+            #  self.filter_cursor_Y = self.filter_cursor_Y[:-1]
+
+            # calculate output value
+            y_out = 0
+            for i in range(0, filter_size):
+                y_out = y_out + self.filter_cursor_Y[i] * c[i]
+            #  print(y_out)
+            #  print
 
         return y_out
 
