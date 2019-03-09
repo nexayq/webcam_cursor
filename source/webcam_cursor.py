@@ -225,23 +225,30 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # get (x,y) of top left aruco corner
         if ids is not None:
+            # get number of matched IDs
+            count_matches = 0
             for i in range(len(ids)):
-                # follow only one id
                 if ids[i][0] == NK_ARUCO_ID:
-                    c = corners[i][0]
-                    x = c[0][0]
-                    y = c[0][1]
-                    #  print("c[" + str(i) + "] = " + str(c[i]))
-                    #  print("x = " + str(x))
-                    #  print("y = " + str(y))
-                    #  print("")
+                    count_matches = count_matches + 1
+                    match_idx = i
 
-                    # move cursor if checkbox is checked
-                    move = 0
-                    if self.moveCursorCheckBox.checkState():
-                        move = 1
-                    # move cursor
-                    self.move_cursor(move, x, y)
+            # move cursor only if exactly one valid ArUco symbol is detected
+            if count_matches == 1:
+
+                c = corners[match_idx][0]
+                x = c[0][0]
+                y = c[0][1]
+                #  print("c[" + str(i) + "] = " + str(c[i]))
+                #  print("x = " + str(x))
+                #  print("y = " + str(y))
+                #  print("")
+
+                # move cursor if checkbox is checked
+                move = 0
+                if self.moveCursorCheckBox.checkState():
+                    move = 1
+                # move cursor
+                self.move_cursor(move, x, y)
 
         return frame_markers
 
