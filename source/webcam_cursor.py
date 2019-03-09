@@ -24,6 +24,9 @@ NK_ARUCO_ID = 43
 # temp for calculating FIR coefficients
 from scipy import signal
 
+# Constants
+NK_DWELL_MOVE_THRESH = 10
+
 
 # disable closing of app when upper left corner is reached
 pyautogui.FAILSAFE = False
@@ -103,7 +106,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.cX_prev = 0
         self.cY_prev = 0
         self.time_dwell_elapsed = 10000
-        self.move_happened = 0
+        self.move_detected = 0
         #  self.move_array_X = np.zeros(4)
         #  self.i = 0
         self.state_X = 0
@@ -148,15 +151,16 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.timer_dwell = QTimer(self)
         self.timer_dwell.timeout.connect(self.check_move)
         #  self.timer_dwell.start(2000)
-        self.timer_dwell.start(1600)
+        self.timer_dwell.start(1800)
 
     # check mouse movement
     def check_move(self):
         checkbox_check = self.moveCursorCheckBox.checkState() and self.dwellClickCheckBox.checkState()
-        if checkbox_check and (self.move_happened == 0):
-            print("mouse click")
+        if checkbox_check and (self.move_detected == 0):
+            #  print("mouse click")
             pyautogui.click()  # click the mouse
-        self.move_happened = 0
+            #  self.timer_dwell.start(1600)
+        self.move_detected = 0
 
     # start webcam
     def get_frame(self):
@@ -399,8 +403,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 # move cursor
                 self.move_cursor(move, cX, cY)
             else:
+                pass
                 # false move
-                self.move_happened = 1
+                #  self.move_detected = 1
 
         return green_mask
 
@@ -439,7 +444,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  pyautogui.moveRel(-move_X, None)
             #  move_X = -delta_X*4
             #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
-            self.move_happened = 1
+            #  self.move_detected = 1
             #  move_X = -delta_X*speed
             move_X = -(delta_X-noise_X)
             #  pyautogui.moveRel(move_X, None)
@@ -449,7 +454,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  pyautogui.moveRel(move_X, None)
             #  move_X = -delta_X*4
             #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
-            self.move_happened = 1
+            #  self.move_detected = 1
             #  move_X = -delta_X*speed
             move_X = -(delta_X-noise_X)
             #  pyautogui.moveRel(move_X, None)
@@ -460,7 +465,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print
         if (delta_Y > noise_Y):
             #  #  pyautogui.moveRel(-move_X, None)
-            self.move_happened = 1
+            #  self.move_detected = 1
             #  move_Y = delta_Y*speed
             move_Y = delta_Y-noise_Y
             #  pyautogui.moveRel(None, move_Y)
@@ -468,7 +473,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  #  pass
         elif (delta_Y < -noise_Y):
             #  #  pyautogui.moveRel(move_X, None)
-            self.move_happened = 1
+            #  self.move_detected = 1
             #  move_Y = delta_Y*speed
             move_Y = delta_Y-noise_Y
             #  pyautogui.moveRel(None, move_Y)
@@ -509,7 +514,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 #  pyautogui.moveRel(move_X*speed_X, None)
             #  pyautogui.moveRel(move_X*speed_X, None)
 
-            move_X_final = self.digital_filter_cursor_X(move_X*speed_X)
+            move_X_final, move_x = self.digital_filter_cursor_X(move_X*speed_X)
             pyautogui.moveRel(int(round(move_X_final)), None)
 
             #  print(noise_Y)
@@ -520,8 +525,11 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  else:
                 #  pyautogui.moveRel(None, move_Y*speed_Y)
 
-            move_Y_final = self.digital_filter_cursor_Y(move_Y*speed_Y)
+            move_Y_final, move_y = self.digital_filter_cursor_Y(move_Y*speed_Y)
             pyautogui.moveRel(None, int(round(move_Y_final)))
+
+            if move_x or move_y:
+                self.move_detected = 1
 
         #  object_detected = 1
 
@@ -667,8 +675,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             for i in range(0, filter_size):
                 x_out = x_out + self.filter_cursor_X[i] * c[i]
             #  print(x_out)
+            #  print(abs(x_out))
 
-        return x_out
+        move = 0
+        if(abs(x_out) > NK_DWELL_MOVE_THRESH):
+            move = 1
+
+        return x_out, move
 
 
     # Digital filter for cursor movement Y
@@ -702,7 +715,11 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  print(y_out)
             #  print
 
-        return y_out
+        move = 0
+        if(abs(y_out) > NK_DWELL_MOVE_THRESH):
+            move = 1
+
+        return y_out, move
 
 
     # save GUI state
