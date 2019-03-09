@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg3355"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   xml:space="preserve"
+   width="765"
+   height="990"
+   viewBox="0 0 765 990"
+   sodipodi:docname="apriltag_12.svg"><metadata
+     id="metadata3361"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+     id="defs3359"><clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3373"><path
+         d="M 0,0 800,0 800,800 0,800 0,0 Z"
+         id="path3375"
+         inkscape:connector-curvature="0" /></clipPath></defs><sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="712"
+     id="namedview3357"
+     showgrid="false"
+     inkscape:zoom="0.53232323"
+     inkscape:cx="382.5"
+     inkscape:cy="495"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g3363" /><g
+     id="g3363"
+     inkscape:groupmode="layer"
+     inkscape:label="apriltags1-20"
+     transform="matrix(1.25,0,0,-1.25,0,765.04375)"><g
+       id="g3365"
+       transform="scale(0.76505,0.76505)"><g
+         id="g3367"><g
+           id="g3369"><g
+             id="g3371"
+             clip-path="url(#clipPath3373)"><g
+               id="g3377"
+               transform="scale(0.1,0.1)"><path
+                 d="m 800,4000 0,-3200 3200,0 3200,0 0,3200 0,3200 -3200,0 -3200,0 0,-3200 z m 2400,2000 0,-400 400,0 400,0 0,-800 0,-800 -400,0 -400,0 0,-400 0,-400 400,0 400,0 0,-800 0,-800 -800,0 -800,0 0,400 0,400 400,0 400,0 0,400 0,400 -400,0 -400,0 0,400 0,400 400,0 400,0 0,400 0,400 -800,0 -800,0 0,400 0,400 400,0 400,0 0,400 0,400 400,0 400,0 0,-400 z m 2400,-800 0,-400 400,0 400,0 0,-800 0,-800 -400,0 -400,0 0,-800 0,-800 -400,0 -400,0 0,1200 0,1200 400,0 400,0 0,400 0,400 -400,0 -400,0 0,400 0,400 400,0 400,0 0,-400 z"
+                 style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+                 id="path3379"
+                 inkscape:connector-curvature="0" /></g></g></g></g></g><g
+       id="g3381"
+       transform="translate(0,-179.965)"><text
+         transform="matrix(1,0,0,-1,236.864,137.686)"
+         style="font-variant:normal;font-size:24.78709984px;font-family:'Nimbus Sans L';-inkscape-font-specification:NimbusSanL-Regu;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text3383"><tspan
+           x="0 6.8908138 24.7871"
+           y="0"
+           sodipodi:role="line"
+           id="tspan3385">ID:</tspan></text>
+<text
+         transform="matrix(1,0,0,-1,275.431,115.802)"
+         style="font-variant:normal;font-size:89.6638031px;font-family:'Nimbus Sans L';-inkscape-font-specification:NimbusSanL-Regu;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text3387"><tspan
+           x="0 49.853073"
+           y="0"
+           sodipodi:role="line"
+           id="tspan3389">12</tspan></text>
+<text
+         transform="matrix(1,0,0,-1,249.592,91.393)"
+         style="font-variant:normal;font-size:14.34619999px;font-family:'Nimbus Sans L';-inkscape-font-specification:NimbusSanL-Regu;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text3391"><tspan
+           x="0 7.0439844 15.020472 26.985203 30.54306 38.519547 50.469933 53.654789 56.839645 64.012741 72.936081 80.912567 88.889053 96.86554 104.84203"
+           y="0"
+           sodipodi:role="line"
+           id="tspan3393">Tagfamily:36h11</tspan></text>
+<text
+         transform="matrix(1,0,0,-1,300.147,-29.888)"
+         style="font-variant:normal;font-weight:normal;font-size:11.9552002px;font-family:CMR12;-inkscape-font-specification:CMR12;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="text3395"><tspan
+           x="0 5.8532658"
+           y="0"
+           sodipodi:role="line"
+           id="tspan3397">13</tspan></text>
+</g></g></svg>
