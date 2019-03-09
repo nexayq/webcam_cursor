@@ -44,6 +44,23 @@ while True:
                 print("y = " + str(c[i][0][1]))
                 print("")
 
+        #  frame_markers = frame
+        if rejectedImgPoints:
+            print(rejectedImgPoints)
+            print(rejectedImgPoints[0][0][0])
+            print(int(rejectedImgPoints[0][0][0][0]))
+            print
+
+            x1 = int(rejectedImgPoints[0][0][0][0])
+            y1 = int(rejectedImgPoints[0][0][0][1])
+
+            x2 = x1 + 30
+            y2 = y1 + 30
+
+            #  frame_markers = cv2.rectangle(frame,(384,0),(510,128),(0,255,0),3)
+            frame_markers = cv2.rectangle(frame_markers,(x1,y1),(x2,y2),(0,255,0),3)
+        else:
+            frame_markers = frame
 
         cv2.imshow("Web cam input", frame_markers)
         #  cv2.imshow("Gray input", gray_markers)
