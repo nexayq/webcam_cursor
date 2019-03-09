@@ -60,8 +60,8 @@ Download .exe from Releases:  [webcam_cursor.exe](https://github.com/nexayq/webc
 
 # Development
 
-## Ubuntu - install dependencies
-    $ cd install/ubuntu/
+## Ubuntu - install dependencies for development
+    $ cd development/ubuntu/
     $ ./install_dependencies.sh
 
 
