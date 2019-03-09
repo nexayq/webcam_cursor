@@ -771,6 +771,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print(version)
         #  config.endGroup()
 
+        # check if config file exists
+        if version != '2.0':
+            return -1
+
         # GUI settings
         self.algorithmComboBox.setCurrentIndex( config.value('algorithm', type=int) )
 
