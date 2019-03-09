@@ -8,6 +8,7 @@ import os
 from PyQt4 import QtCore, QtGui, uic
 from PyQt4.QtCore import Qt
 from PyQt4.QtCore import QTimer
+from PyQt4.QtCore import QSettings
 
 import cv2
 import numpy as np
@@ -57,6 +58,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         QtGui.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
+
         # paint selected color to widget
         self.colorSpinBox.valueChanged.connect(self.GetColor)
         color = self.colorSpinBox.value()
@@ -67,6 +69,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         p.setColor(QtGui.QPalette.Window, QtGui.QColor.fromHsv(color, 255, 255))
         self.colorWidget.setAutoFillBackground(True)
         self.colorWidget.setPalette(p)
+
+        # load GUI settings from config file
+        self.load_gui()
 
         self.cap = cv2.VideoCapture(0)
         if self.cap is None or not self.cap.isOpened():
@@ -153,7 +158,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             pyautogui.click()  # click the mouse
         self.move_happened = 0
 
-
     # start webcam
     def get_frame(self):
         #  cap = cv2.VideoCapture(0)
@@ -163,6 +167,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # get user selected algorithm
         algorithm = self.algorithmComboBox.currentText()
+        #  index     = self.algorithmComboBox.currentIndex()
+        #  print(index)
         #  print("Combo box: " + algorithm)
 
         # change to be suitable for QImage
@@ -426,7 +432,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             self.first_data = 1
             return move_X, move_Y
 
-        print(delta_X)
+        #  print(delta_X)
 
         #  print(delta_X)
         if (delta_X > noise_X):
@@ -450,8 +456,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  print("move_right: ", 1)
 
         # Y-axis
-        print(delta_Y)
-        print
+        #  print(delta_Y)
+        #  print
         if (delta_Y > noise_Y):
             #  #  pyautogui.moveRel(-move_X, None)
             self.move_happened = 1
@@ -698,9 +704,80 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         return y_out
 
+
+    # save GUI state
+    def save_gui(self):
+        print("save_gui")
+        # located at "~/.config/webcam_cursor/config.cfg"
+        # directory and filename for config file
+        config = QSettings('webcam_cursor', 'webcam_cursor')
+        #  config.beginGroup("./config.cfg")
+        config.setValue('number', 55)
+        config.setValue('version', '2.0')
+        #  config.endGroup()
+
+        # GUI settings
+        config.setValue('algorithm', self.algorithmComboBox.currentIndex())
+        #  print(self.algorithmComboBox.currentIndex())
+
+        # color
+        config.setValue('color_H', self.colorSpinBox.value())
+        config.setValue('color_min_S', self.minS_SpinBox.value())
+        config.setValue('color_min_V', self.minV_SpinBox.value())
+
+        # cursor
+        config.setValue('cursor_move',  self.moveCursorCheckBox.checkState())
+        config.setValue('cursor_dwell',  self.dwellClickCheckBox.checkState())
+        # speed
+        config.setValue('cursor_speed_X', self.speedSpinBox_X.value())
+        config.setValue('cursor_speed_Y', self.speedSpinBox_Y.value())
+        # filter cursor
+        config.setValue('filter_pixels', self.filterSpinBox.value())
+        config.setValue('filter_X', self.filterSpinBox_X.value())
+        config.setValue('filter_Y', self.filterSpinBox_Y.value())
+
+
+    # when application closes save settings
+    def closeEvent(self, event):
+        #  print "closing PyQtTest"
+        self.save_gui()
+        # report_session()
+
+    # load GUI state
+    def load_gui(self):
+        print("load_gui")
+        # located at "~/.config/webcam_cursor/config.cfg"
+        # directory and filename for config file
+        config = QSettings('webcam_cursor', 'webcam_cursor')
+        #  config.beginGroup("./config.cfg")
+        version = config.value('version', type=str)
+        #  print(version)
+        #  config.endGroup()
+
+        # GUI settings
+        self.algorithmComboBox.setCurrentIndex( config.value('algorithm', type=int) )
+
+        # color
+        self.colorSpinBox.setValue( config.value('color_H', type=int) )
+        self.minS_SpinBox.setValue( config.value('color_min_S', type=int) )
+        self.minV_SpinBox.setValue( config.value('color_min_V', type=int) )
+
+        # cursor
+        self.moveCursorCheckBox.setChecked( config.value('cursor_move', type=int) )
+        self.dwellClickCheckBox.setChecked( config.value('cursor_dwell', type=int) )
+        # speed
+        self.speedSpinBox_X.setValue( config.value('cursor_speed_X', type=int) )
+        self.speedSpinBox_Y.setValue( config.value('cursor_speed_Y', type=int) )
+        # filter cursor
+        self.filterSpinBox.setValue( config.value('filter_pixels', type=int) )
+        self.filterSpinBox_X.setValue( config.value('filter_X', type=int) )
+        self.filterSpinBox_Y.setValue( config.value('filter_Y', type=int) )
+
+
 # run app
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     window = MyApp()
     window.show()
+    #  window.save_gui()
     sys.exit(app.exec_())
