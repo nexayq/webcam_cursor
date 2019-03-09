@@ -19,3 +19,6 @@ pip2 install pyautogui --user
 sudo apt install libeigen3-dev
 # pip2 install aruco --user
 pip2 install opencv-contrib-python --user
+
+# Filtering
+sudo apt install python-scipy
