@@ -17,6 +17,9 @@ import pyautogui
 from cv2 import aruco
 NK_ARUCO_ID = 43
 
+# apriltag - comment to reduce binary size
+#  import apriltag
+
 # temp for calculating FIR coefficients
 from scipy import signal
 
@@ -176,6 +179,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         if(algorithm == "ArUco"):
             aruco_frame = self.detect_aruco(frame)
+            #  aruco_frame = self.detect_apriltag(frame)
             image = cv2.cvtColor(aruco_frame, cv2.COLOR_BGR2RGB)
         elif(algorithm == "Color"):
             # range for OpenCV H is 0-180, range for Qt H is 0-360
@@ -252,6 +256,40 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         return frame_markers
 
+    # detect apriltag
+    # uncomment "import apriltag" in order to use this method
+    def detect_apriltag(self, frame):
+
+        # get gray picture
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        detector = apriltag.Detector()
+        #  result = detector.detect(median)
+        result = detector.detect(gray)
+        if result:
+            tf = result[0].tag_family
+            cx = result[0].center[0]
+            cy = result[0].center[1]
+            print(tf)
+            print(cx)
+            print(cy)
+
+            x1 = int(round(cx))
+            y1 = int(round(cy))
+            x2 = x1 + 10
+            y2 = y1 + 10
+            frame_markers = cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,0),3)
+
+            # move cursor if checkbox is checked
+            move = 0
+            if self.moveCursorCheckBox.checkState():
+                move = 1
+            # move cursor
+            self.move_cursor(move, cx, cy)
+        else:
+            frame_markers = frame
+
+        return frame_markers
 
 
     # detect object
