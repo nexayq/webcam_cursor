@@ -3,6 +3,10 @@ Move mouse cursor by moving your head - place ArUco tag somewhere (glasses, fore
 
 Mouse cursor is following ArUco symbol 43(4x4) or specific color from your webcam.
 
+Mainly intended for people with disabilities to use the computer
+
+Made with love for my neighbour Biljana
+
 # Screenshots
 <p align="center">
     ArUco symbol 43 tracking
