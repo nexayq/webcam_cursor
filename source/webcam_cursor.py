@@ -677,6 +677,22 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  print(x_out)
             #  print(abs(x_out))
 
+        # analyze
+        if(abs(x_out) > 5):
+            print("X: " + str(abs(x_out)))
+
+        # small movements
+        if(abs(x_out) > 1 and abs(x_out) < 5):
+            x_out = x_out/2.5
+        # fine movement
+        #  elif(abs(x_out) < 8):
+            #  x_out = x_out/2.5
+        # coarse movement speed up
+        #  elif(abs(x_out) > 12):
+        elif(abs(x_out) > 8):
+            x_out = x_out*2.5
+
+        # dwell click
         move = 0
         if(abs(x_out) > NK_DWELL_MOVE_THRESH):
             move = 1
@@ -713,8 +729,25 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             for i in range(0, filter_size):
                 y_out = y_out + self.filter_cursor_Y[i] * c[i]
             #  print(y_out)
+            #  print(abs(y_out))
             #  print
 
+        # analyze
+        if(abs(y_out) > 5):
+            print("Y: "+str(abs(y_out)))
+
+        # small movements
+        if(abs(y_out) > 1 and abs(y_out) < 6):
+            y_out = y_out/2.5
+        # fine movement
+        #  elif(abs(y_out) < 8):
+            #  y_out = y_out/2.5
+        # coarse movement speed up
+        elif(abs(y_out) > 10):
+            y_out = y_out*2.5
+
+
+        # dwell click
         move = 0
         if(abs(y_out) > NK_DWELL_MOVE_THRESH):
             move = 1
