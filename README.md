@@ -54,7 +54,7 @@ Download archive from Releases:  [webcam_cursor.exe](https://github.com/nexayq/w
 
 Extract **webcam_cursor.zip** to some directory
 
-Run **webcam_cursor** (webcam_cursor.vbs) from File Explorer 
+Run **webcam_cursor** (webcam_cursor.vbs) from File Explorer
 
 # Development
 
