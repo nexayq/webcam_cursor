@@ -118,8 +118,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.filter_cursor_X = np.zeros(100)
         self.filter_cursor_Y = np.zeros(100)
 
-        self.fine_control_X = np.zeros(5)
-        self.fine_control_Y = np.zeros(5)
+        self.fine_control_X = np.zeros(2)
+        self.fine_control_Y = np.zeros(2)
         #  self.fine_control_X = np.zeros(4)
         #  self.fine_control_Y = np.zeros(4)
 
@@ -714,11 +714,11 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         #  print(np.size(self.fine_control_X))
         #  if(sum_X/np.size(self.fine_control_X) < 200):
-        if(sum_X < 1500):
+        if(sum_X < 1500/5*2):
             x_out = x_out/2
             # use some OK default speed
             x_out = 15*x_out/1000
-        elif(sum_X > 4000):
+        elif(sum_X > 4000/5*2):
             #  y_out = 20*y_out/1000
             x_out = 2*speed*x_out/1000
         else:
@@ -794,11 +794,11 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # small movements
 
-        if(sum_Y < 1000):
+        if(sum_Y < 1000/5*2):
             y_out = y_out/2
             # use some OK default speed
             y_out = 25*y_out/1000
-        elif(sum_Y > 2000):
+        elif(sum_Y > 2000/5*2):
             #  y_out = 20*y_out/1000
             y_out = 2*speed*y_out/1000
         else:
