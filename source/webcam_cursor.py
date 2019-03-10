@@ -26,6 +26,7 @@ from scipy import signal
 
 # Constants
 NK_DWELL_MOVE_THRESH = 10
+NK_VERSION = '2.2'
 
 
 # disable closing of app when upper left corner is reached
@@ -824,7 +825,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         config = QSettings('webcam_cursor', 'webcam_cursor')
         #  config.beginGroup("./config.cfg")
         config.setValue('number', 55)
-        config.setValue('version', '2.0')
+        config.setValue('version', NK_VERSION)
         #  config.endGroup()
 
         # GUI settings
@@ -862,11 +863,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         config = QSettings('webcam_cursor', 'webcam_cursor')
         #  config.beginGroup("./config.cfg")
         version = config.value('version', type=str)
+        number = config.value('number', type=int)
         #  print(version)
         #  config.endGroup()
 
         # check if config file exists
-        if version != '2.0':
+        if number != 55:
+            print("NK: Using default GUI values")
             return -1
 
         # GUI settings
