@@ -117,6 +117,11 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.filter_cursor_X = np.zeros(100)
         self.filter_cursor_Y = np.zeros(100)
 
+        self.fine_control_X = np.zeros(5)
+        self.fine_control_Y = np.zeros(5)
+        #  self.fine_control_X = np.zeros(4)
+        #  self.fine_control_Y = np.zeros(4)
+
     # Custom function
     def GetColor(self):
         color = self.colorSpinBox.value()
@@ -514,7 +519,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 #  pyautogui.moveRel(move_X*speed_X, None)
             #  pyautogui.moveRel(move_X*speed_X, None)
 
-            move_X_final, move_x = self.digital_filter_cursor_X(move_X*speed_X)
+            move_X_final, move_x = self.digital_filter_cursor_X(move_X, speed_X)
             pyautogui.moveRel(int(round(move_X_final)), None)
 
             #  print(noise_Y)
@@ -525,7 +530,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  else:
                 #  pyautogui.moveRel(None, move_Y*speed_Y)
 
-            move_Y_final, move_y = self.digital_filter_cursor_Y(move_Y*speed_Y)
+            move_Y_final, move_y = self.digital_filter_cursor_Y(move_Y, speed_Y)
             pyautogui.moveRel(None, int(round(move_Y_final)))
 
             if move_x or move_y:
@@ -648,7 +653,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
 
     # Digital filter for cursor movement X
-    def digital_filter_cursor_X(self, dx):
+    def digital_filter_cursor_X(self, dx, speed):
         # filter coefficients
         #  c = np.array([0.25, 0.25, 0.25, 0.25])
         #  c = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
@@ -675,22 +680,49 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             for i in range(0, filter_size):
                 x_out = x_out + self.filter_cursor_X[i] * c[i]
             #  print(x_out)
-            #  print(abs(x_out))
+            #  print(abs(x_out)*1000)
+
+        # scale for easier analysis
+        x_out = x_out*1000
 
         # analyze
-        if(abs(x_out) > 5):
-            print("X: " + str(abs(x_out)))
+        #  if(abs(x_out) > 400):
+            #  print("X: " + str(abs(x_out)))
+
+        # shift in first element
+        self.fine_control_X = np.append([abs(x_out)], self.fine_control_X)
+        # delete last element
+        self.fine_control_X = self.fine_control_X[:-1]
+        sum_X = sum(self.fine_control_X)
+        #  print("X: "+str(sum_X))
 
         # small movements
-        if(abs(x_out) > 1 and abs(x_out) < 5):
-            x_out = x_out/2.5
+
+        #  print(np.size(self.fine_control_X))
+        #  if(sum_X/np.size(self.fine_control_X) < 200):
+        if(sum_X < 1500):
+            x_out = x_out/2
+            # use some OK default speed
+            x_out = 15*x_out/1000
+        elif(sum_X > 4000):
+            #  y_out = 20*y_out/1000
+            x_out = 2*speed*x_out/1000
+        else:
+            # speed scale
+            x_out = speed*x_out/1000
+
+        #  if(abs(x_out) > 1 and abs(x_out) < 5):
+        #  if(abs(x_out) < 400):
+            #  x_out = x_out/3.5
+        #  elif(abs(x_out) > 1000):
+            #  x_out = x_out*2.5
         # fine movement
         #  elif(abs(x_out) < 8):
             #  x_out = x_out/2.5
         # coarse movement speed up
         #  elif(abs(x_out) > 12):
-        elif(abs(x_out) > 8):
-            x_out = x_out*2.5
+        #  elif(abs(x_out) > 8):
+            #  x_out = x_out*2.5
 
         # dwell click
         move = 0
@@ -701,7 +733,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
 
     # Digital filter for cursor movement Y
-    def digital_filter_cursor_Y(self, dy):
+    def digital_filter_cursor_Y(self, dy, speed):
         # filter coefficients
         #  c = np.array([0.25, 0.25, 0.25, 0.25])
         #  c = 2*np.array([0.2, 0.2, 0.2, 0.2, 0.2])
@@ -729,23 +761,52 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             for i in range(0, filter_size):
                 y_out = y_out + self.filter_cursor_Y[i] * c[i]
             #  print(y_out)
-            #  print(abs(y_out))
+            #  print(abs(y_out)*1000)
             #  print
 
+        # scale for easier analysis
+        y_out = y_out*1000
+
         # analyze
-        if(abs(y_out) > 5):
-            print("Y: "+str(abs(y_out)))
+        #  if(abs(y_out) > 400):
+            #  print("Y: "+str(abs(y_out)))
+
+        # shift in first element
+        self.fine_control_Y = np.append([abs(y_out)], self.fine_control_Y)
+        # delete last element
+        self.fine_control_Y = self.fine_control_Y[:-1]
+        sum_Y = sum(self.fine_control_Y)
+        #  print("Y: "+str(sum_Y))
 
         # small movements
-        if(abs(y_out) > 1 and abs(y_out) < 6):
-            y_out = y_out/2.5
+
+        if(sum_Y < 1000):
+            y_out = y_out/2
+            # use some OK default speed
+            y_out = 25*y_out/1000
+        elif(sum_Y > 2000):
+            #  y_out = 20*y_out/1000
+            y_out = 2*speed*y_out/1000
+        else:
+            # speed scale
+            y_out = speed*y_out/1000
+
+        # small movements
+        #  if(abs(y_out) > 1 and abs(y_out) < 6):
+        #  if(abs(y_out) < 600):
+            #  y_out = y_out/3.5
+        #  elif(abs(y_out) > 1000):
+            #  y_out = y_out*2.5
         # fine movement
         #  elif(abs(y_out) < 8):
             #  y_out = y_out/2.5
         # coarse movement speed up
-        elif(abs(y_out) > 10):
-            y_out = y_out*2.5
+        #  elif(abs(y_out) > 10):
+            #  y_out = y_out*2.5
 
+
+        # speed scale
+        #  y_out = speed*y_out/1000
 
         # dwell click
         move = 0
