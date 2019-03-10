@@ -256,8 +256,21 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             if count_matches == 1:
 
                 c = corners[match_idx][0]
-                x = c[0][0]
-                y = c[0][1]
+                #  print(c)
+                # detect one point only
+                #  x = c[0][0]
+                #  y = c[0][1]
+                x = c[:, 0].mean()
+                y = c[:, 1].mean()
+
+                # draw center point
+                draw_x1 = int(round(x))
+                draw_y1 = int(round(y))
+                draw_x2 = draw_x1 + 10
+                draw_y2 = draw_y1 + 10
+                frame_markers = cv2.rectangle(frame_markers,(draw_x1,draw_y1),(draw_x2,draw_y2),(0,255,0),3)
+                #  frame_markers = cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,0),3)
+                #  frame_markers = cv2.rectangle(median,(x1,y1),(x2,y2),(0,255,0),3)
                 #  print("c[" + str(i) + "] = " + str(c[i]))
                 #  print("x = " + str(x))
                 #  print("y = " + str(y))

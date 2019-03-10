@@ -5,8 +5,8 @@ import numpy as np
 
 # get video input from web camera
 cap = cv2.VideoCapture(0)
-cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH,1280)
-cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT,720)
+#  cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH,1280)
+#  cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT,720)
 
 while True:
         _,frame = cap.read()
