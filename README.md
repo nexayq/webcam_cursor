@@ -1,5 +1,6 @@
 # Webcam Cursor
 Move mouse cursor by moving your head - place ArUco tag somewhere (glasses, forehead, ...)
+
 Mouse cursor is following ArUco symbol 43(4x4) or specific color from your webcam.
 
 # Screenshots
