@@ -5,7 +5,7 @@ Mouse cursor is following ArUco symbol 43(4x4) or specific color from your webca
 
 Mainly intended for people with disabilities to use the computer
 
-Made with love for my neighbour Biljana
+Made with love for my neighbour Bilja
 
 # Screenshots
 <p align="center">
