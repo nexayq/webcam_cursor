@@ -26,7 +26,7 @@ from scipy import signal
 
 # Constants
 NK_DWELL_MOVE_THRESH = 10
-NK_VERSION = '2.2'
+NK_VERSION = '2.3'
 
 
 # disable closing of app when upper left corner is reached
