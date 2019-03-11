@@ -7,6 +7,11 @@ Mainly intended for people with disabilities to use the computer (Multiple scler
 
 Made with love for my neighbour Bilja
 
+
+# Demo video
+Demo video that shows control of mouse cursor with head movement: [video](https://www.youtube.com/watch?v=dbJvwXaWFdY)
+
+
 # Screenshots
 <p align="center">
     ArUco symbol 43 tracking
@@ -19,11 +24,6 @@ Made with love for my neighbour Bilja
 </p>
 
 ![Screenshot - Custom Color tracking][color_screenshot]
-
-
-# Demo video
-
-Demo video that shows control of mouse cursor with head movement: [demo](https://www.youtube.com/watch?v=dbJvwXaWFdY)
 
 
 # ArUco algorithm
