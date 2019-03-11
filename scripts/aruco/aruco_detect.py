@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 
+from __future__ import print_function, division
 import cv2
 from cv2 import aruco
 import numpy as np
@@ -49,7 +50,7 @@ while True:
             print(rejectedImgPoints)
             print(rejectedImgPoints[0][0][0])
             print(int(rejectedImgPoints[0][0][0][0]))
-            print
+            print()
 
             x1 = int(rejectedImgPoints[0][0][0][0])
             y1 = int(rejectedImgPoints[0][0][0][1])

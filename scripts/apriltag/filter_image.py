@@ -1,11 +1,12 @@
 #!/usr/bin/env python2
 
+from __future__ import print_function, division
 import cv2
 import numpy as np
 import apriltag
 
-img = cv2.imread('image_012.jpg')
-#  img = cv2.imread('image_00.jpg')
+#  img = cv2.imread('image_012.jpg')
+img = cv2.imread('image_00.jpg')
 
 # moving average
 kernel = np.ones((5,5),np.float32)/25

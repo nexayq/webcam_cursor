@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 
+from __future__ import print_function, division
 import cv2
 import numpy as np
 import pyautogui
@@ -16,8 +17,8 @@ move_X_const  = 2
 
 # get video input from web camera
 cap = cv2.VideoCapture(0)
-cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH,1280)
-cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT,720)
+#  cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH,1280)
+#  cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT,720)
 
 while True:
         _,frame = cap.read()
