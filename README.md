@@ -51,12 +51,15 @@ H range is 0-360
 
 # Install
 
-## Linux (tested on Ubuntu)
+## Linux
 Download archive from Releases:  [webcam_cursor.tar.gz](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v2.3/webcam_cursor.tar.gz)
 
 Extract **webcam_cursor.tar.gz** archive to some directory
 
 Execute **webcam_cursor.run** from file manager or terminal
+
+Tested on:
+**Ubuntu 16.04**, **Linux Mint 18.3**, **Ubuntu 18.04**, **Antergos 19.2**
 
 
 ## Windows
@@ -65,6 +68,9 @@ Download archive from Releases:  [webcam_cursor.zip](https://github.com/nexayq/w
 Extract **webcam_cursor.zip** to some directory
 
 Run **webcam_cursor** (webcam_cursor.vbs) from File Explorer
+
+Tested on:
+**Windows 7**, **Windows 10**
 
 # Development
 
