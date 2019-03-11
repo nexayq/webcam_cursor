@@ -8,8 +8,8 @@ Mainly intended for people with disabilities to use the computer (Multiple scler
 Made with love for my neighbour Bilja
 
 
-# Demo video
-Demo video that shows control of mouse cursor with head movement: [video](https://www.youtube.com/watch?v=dbJvwXaWFdY)
+# Demo Video
+Demo Video that shows control of mouse cursor with head movement: [Video](https://www.youtube.com/watch?v=dbJvwXaWFdY)
 
 
 # Screenshots
