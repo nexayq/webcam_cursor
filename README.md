@@ -79,7 +79,6 @@ Run **webcam_cursor** (webcam_cursor.vbs) from File Explorer
 
 
 # License
-
     GPL-2.0
 
 [aruco_screenshot]:       https://github.com/nexayq/webcam_cursor/blob/master/data/screenshots/aruco_screenshot.png
