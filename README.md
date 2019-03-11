@@ -86,7 +86,12 @@ Tested on:
 
 ## Run
     $ cd source/
-    $ ./run.sh
+    
+    # for python2
+    $ python2 webcam_cursor.py
+    
+    # for python3
+    $ python3 webcam_cursor.py
 
 
 # License
