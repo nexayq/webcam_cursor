@@ -20,6 +20,12 @@ Made with love for my neighbour Bilja
 
 ![Screenshot - Custom Color tracking][color_screenshot]
 
+
+# Demo video
+
+Demo video that shows control of mouse cursor with head movement: [demo](https://www.youtube.com/watch?v=dbJvwXaWFdY)
+
+
 # ArUco algorithm
 In order to use ArUco algorithm you need to download and print ArUco 4x4 symbol 43 (looks like "IF")
 
