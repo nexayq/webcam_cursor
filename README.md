@@ -60,7 +60,7 @@ Execute **webcam_cursor.run** from file manager or terminal
 
 
 ## Windows
-Download archive from Releases:  [webcam_cursor.exe](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v2.3/webcam_cursor.zip)
+Download archive from Releases:  [webcam_cursor.zip](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v2.3/webcam_cursor.zip)
 
 Extract **webcam_cursor.zip** to some directory
 
