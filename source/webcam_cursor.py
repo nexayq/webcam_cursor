@@ -2,6 +2,8 @@
 
 #  https://www.pythonforengineers.com/your-first-gui-app-with-python-and-pyqt/
 
+from __future__ import print_function, division
+
 import sys
 import os
 
@@ -776,7 +778,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 y_out = y_out + self.filter_cursor_Y[i] * c[i]
             #  print(y_out)
             #  print(abs(y_out)*1000)
-            #  print
+            #  print()
 
         # scale for easier analysis
         y_out = y_out*1000
