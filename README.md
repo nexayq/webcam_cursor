@@ -76,9 +76,11 @@ Tested on:
 
 ## Ubuntu - install dependencies for development
     $ cd development/ubuntu/
-    $ # for python2
+    
+    # for python2
     $ ./install_dependencies_python2.sh
-    $ # or for python3
+    
+    # or for python3
     $ ./install_dependencies_python3.sh
 
 
