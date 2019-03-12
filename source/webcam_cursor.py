@@ -648,7 +648,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # linux   - located at "~/.config/webcam_cursor/config.cfg"
         # windows - located at "regedit -> HKEY_CURRENT_USER\Software\webcam_cursor\webcam_cursor"
-        # windows - located in binary file "%USER\NTUSER.DAT"
+        # windows - located in binary file "%USERPROFILE%\NTUSER.DAT"
 
         # directory and filename for config file
         config = QSettings('webcam_cursor', 'webcam_cursor')
@@ -693,7 +693,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # linux   - located at "~/.config/webcam_cursor/config.cfg"
         # windows - located at "regedit -> HKEY_CURRENT_USER\Software\webcam_cursor\webcam_cursor"
-        # windows - located in binary file "%USER\NTUSER.DAT"
+        # windows - located in binary file "%USERPROFILE%\NTUSER.DAT"
 
         # directory and filename for config file
         config = QSettings('webcam_cursor', 'webcam_cursor')
