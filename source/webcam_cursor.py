@@ -121,6 +121,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  self.fine_control_X = np.zeros(4)
         #  self.fine_control_Y = np.zeros(4)
 
+        # connect "Dwell Click" checkbox checked and dwell timer reset
+        self.dwellClickCheckBox.stateChanged.connect(self.reset_dwell_timer)
+
 
     # get color from spinbox and apply it to widget
     def get_color(self):
@@ -146,6 +149,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.timer_dwell = QTimer(self)
         self.timer_dwell.timeout.connect(self.check_move)
         #  self.timer_dwell.start(2000)
+        self.timer_dwell.start(1800)
+
+    # reset dwell timer
+    def reset_dwell_timer(self):
         self.timer_dwell.start(1800)
 
 
