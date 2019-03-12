@@ -527,8 +527,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
             # shift in first element
             self.filter_cursor_X = np.append([dx], self.filter_cursor_X)
-            # delete last element - not needed (size = 100)
-            #  self.filter_cursor_X = self.filter_cursor_X[:-1]
+            # delete last element
+            self.filter_cursor_X = self.filter_cursor_X[:-1]
 
             # calculate output value - filter MAC (multiply-accumulate)
             x_out = 0
@@ -596,8 +596,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
             # shift in first element
             self.filter_cursor_Y = np.append([dy], self.filter_cursor_Y)
-            # delete last element - not needed (size = 100)
-            #  self.filter_cursor_Y = self.filter_cursor_Y[:-1]
+            # delete last element
+            self.filter_cursor_Y = self.filter_cursor_Y[:-1]
 
             # calculate output value
             y_out = 0
