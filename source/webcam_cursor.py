@@ -211,20 +211,21 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         # get gray picture
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        parameters =  aruco.DetectorParameters_create()
-
         # get aruco frames
+        parameters =  aruco.DetectorParameters_create()
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
         #  print(ids)
 
-        # append aruco detected markers on color frame
-        #  frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
+        # put aruco detected markers on top of colored frame (webcam input)
         frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
 
-        # get (x,y) of top left aruco corner
+        # get (x,y) center coordinates of aruco marker
+        # if only one marker is present
         if ids is not None:
             # get number of matched IDs
             count_matches = 0
+
+            # get number of aruco tags
             for i in range(len(ids)):
                 if ids[i][0] == NK_ARUCO_ID:
                     count_matches = count_matches + 1
@@ -247,8 +248,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 draw_x2 = int(round(x))+5
                 draw_y2 = int(round(y))+5
                 frame_markers = cv2.rectangle(frame_markers,(draw_x1,draw_y1),(draw_x2,draw_y2),(0,255,0),3)
-                #  frame_markers = cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,0),3)
-                #  frame_markers = cv2.rectangle(median,(x1,y1),(x2,y2),(0,255,0),3)
                 #  print("c[" + str(i) + "] = " + str(c[i]))
                 #  print("x = " + str(x))
                 #  print("y = " + str(y))
@@ -258,21 +257,25 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 move = 0
                 if self.moveCursorCheckBox.checkState():
                     move = 1
-                # move cursor
+
+                # move cursor if needed
                 self.move_cursor(move, x, y)
 
         return frame_markers
 
-    # detect apriltag
+
+    # detect apriltag - keep this function if you switch to apriltags
     # uncomment "import apriltag" in order to use this method
     def detect_apriltag(self, frame):
 
         # get gray picture
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+        # get apriltags if present in frame (webcam input)
         detector = apriltag.Detector()
-        #  result = detector.detect(median)
         result = detector.detect(gray)
+
+        # get center of apriltag
         if result:
             tf = result[0].tag_family
             cx = result[0].center[0]
@@ -291,30 +294,33 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             move = 0
             if self.moveCursorCheckBox.checkState():
                 move = 1
-            # move cursor
+
+            # move cursor if needed
             self.move_cursor(move, cx, cy)
+        # when tag is not present return regular frame (webcam input)
         else:
             frame_markers = frame
 
         return frame_markers
 
 
-    # detect object
+    # detect object - keep function if you want to track specific object (rectangular, circle)
     def detect_object(self, gray_image):
         # by default return original image
         detect_image = gray_image
 
         #  mod_image = cv2.GaussianBlur(gray_image, (5, 5), 0)
+
         mod_image = gray_image
         #  thresh = cv2.threshold(mod_image, 60, 255, cv2.THRESH_BINARY)[1]
         #  edges = cv2.Canny(gray_image, 60, 150, apertureSize = 3)
         #  lines = cv2.HoughLines(edges,1,np.pi/180,200)
-        #  cv2.imshow('hough',
 
         # convert image to binary image
         ret,thresh = cv2.threshold(mod_image,127,255,0)
         contours,hierarchy = cv2.findContours(thresh, 1, 2)
 
+        # detect specific contours
         for cntur in contours:
             M = cv2.moments(cntur)
 
@@ -325,7 +331,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 # 0.01 - 0.05
                 approx = cv2.approxPolyDP(cntur, 0.09*cv2.arcLength(cntur,True),True)
 
-                # rectangle
+                # rectangle - not working so great, shows various objects
                 if(len(approx)) == 4:
                     print("Rectangle detected!")
                     print(M["m00"])
@@ -337,7 +343,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                     cv2.drawContours(mod_image,[cntur],0,255,-1)
                     detect_image = mod_image
 
-
         return detect_image
 
 
@@ -345,27 +350,31 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def follow_color(self, frame, color):
         # convert frame from BGR (RGB) format to HSV
         hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        # get user defined Saturation(S) and Value(V) for color
         min_S = self.minS_SpinBox.value()
         min_V = self.minV_SpinBox.value()
 
-        # Color mask
+        # Color mask - for user defined color
         #  low_green  = np.array([25, 52, 72])
         #  high_green = np.array([102, 255, 255])
         #  low_green  = np.array([color-10, 100, 72])
         #  high_green = np.array([color+10, 255, 255])
         #  print(min_S, min_V)
-        low_green  = np.array([color-10, min_S, min_V])
-        high_green = np.array([color+10, 255, 255])
-        green_mask = cv2.inRange(hsv_frame, low_green, high_green)
-        green = cv2.bitwise_and(frame, frame, mask=green_mask)
+        low_color  = np.array([color-10, min_S, min_V])
+        high_color = np.array([color+10, 255, 255])
+        color_mask = cv2.inRange(hsv_frame, low_color, high_color)
+        colored_image = cv2.bitwise_and(frame, frame, mask=color_mask)
 
-        # convert image to binary image
-        ret,thresh = cv2.threshold(green_mask,127,255,0)
+        # convert image to binary image based on user defined color
+        ret,thresh = cv2.threshold(color_mask,127,255,0)
+
+        # find contours from black and white image
         contours,hierarchy = cv2.findContours(thresh, 1, 2)
-
         #  print(len(contours))
-        #find the biggest area
+        # find biggest contour
         if(len(contours) > 0):
+            # find biggest contour
             max_contour = max(contours, key = cv2.contourArea)
             #  print(max_contour)
 
@@ -380,47 +389,50 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  print(len(M))
             #  print(M)
 
-            # calculate x,y coordinate of center
+            # calculate x,y coordinate of contour center
             #  if(M["m00"] != 0):
-            # filter small objects
             #  if(area > 80):
+            # filter small objects
             if(M["m00"] > 300):
                 #  print(M["m00"])
                 cX = int(M["m10"] / M["m00"])
                 cY = int(M["m01"] / M["m00"])
                 #  print(cX, cY)
-                #  print(green[cY,cX])
+                #  print(colored_image[cY,cX])
 
                 # move cursor if checkbox is checked
                 move = 0
                 if self.moveCursorCheckBox.checkState():
                     move = 1
 
-
-                # move cursor
+                # move cursor if needed
                 self.move_cursor(move, cX, cY)
             else:
-                pass
+                #  pass
                 # false move
-                #  self.move_detected = 1
+                self.move_detected = 1
 
-        return green_mask
+        return color_mask
 
 
     # move cursor
     def move_cursor(self, move, cX, cY):
+        # get values from GUI
         filter_move = self.filterSpinBox.value()
         speed_X = self.speedSpinBox_X.value()
         speed_Y = self.speedSpinBox_Y.value()
+
         noise_X = filter_move
         noise_Y = filter_move
         #  noise_Y = (filter_move-1) if (filter_move>0) else 0
         #  noise_X = 0
         #  noise_Y = 0
 
+        # calculate delta_X and delta_Y
         delta_X = cX - self.cX_prev
         delta_Y = cY - self.cY_prev
 
+        # store coordinates for next iteration
         self.cX_prev = cX
         self.cY_prev = cY
 
@@ -434,71 +446,41 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             self.first_data = 1
             return move_X, move_Y
 
+        # X-axis
         #  print(delta_X)
-
-        #  print(delta_X)
-        if (delta_X > noise_X):
-            #  pyautogui.moveRel(-move_X, None)
-            #  move_X = -delta_X*4
-            #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
-            #  self.move_detected = 1
-            #  move_X = -delta_X*speed
+        # if X movement is greater than user defined noise (Filter Pix)
+        if (abs(delta_X) > abs(noise_X)):
             move_X = -(delta_X-noise_X)
-            #  pyautogui.moveRel(move_X, None)
-            #  print("move_left: ", 1)
-            #  pass
-        elif (delta_X < -noise_X):
-            #  pyautogui.moveRel(move_X, None)
-            #  move_X = -delta_X*4
-            #  move_X = (-delta_X*2) if delta_X < 5 else -delta_X*4
-            #  self.move_detected = 1
-            #  move_X = -delta_X*speed
-            move_X = -(delta_X-noise_X)
-            #  pyautogui.moveRel(move_X, None)
-            #  print("move_right: ", 1)
 
         # Y-axis
         #  print(delta_Y)
-        #  print
-        if (delta_Y > noise_Y):
-            #  #  pyautogui.moveRel(-move_X, None)
-            #  self.move_detected = 1
-            #  move_Y = delta_Y*speed
+        #  print()
+        # if Y movement is greater than user defined noise (Filter Pix)
+        if (abs(delta_Y) > abs(noise_Y)):
             move_Y = delta_Y-noise_Y
-            #  pyautogui.moveRel(None, move_Y)
-            #  print("move_down: ", move_Y)
-            #  #  pass
-        elif (delta_Y < -noise_Y):
-            #  #  pyautogui.moveRel(move_X, None)
-            #  self.move_detected = 1
-            #  move_Y = delta_Y*speed
-            move_Y = delta_Y-noise_Y
-            #  pyautogui.moveRel(None, move_Y)
-            #  print("move_up: ", move_Y)
 
-        #  move_array_X = np.zeros((4,1))
-        #  self.move_array_X = np.zeros((4,1))
-        #  print(self.move_array_X.shape)
-        #  self.move_array_X[1:] = self.move_array_X[0:-1]
-        #  self.move_array_X[0] = move_X
-        #  print(self.move_array_X.shape)
-        #  final_move_X = int(round(sum(self.move_array_X)))
-        #  self.move_array_X[self.i] = move_X
-        #  self.i = (self.i + 1)%4
-
+        # if "Move Cursor" checkbox is checked
         if (move == 1 ) :
-            #  final_move_X = int(round(sum(self.move_array_X)/4))
-            #  pyautogui.moveRel(move_X, None)
-            #  pyautogui.moveRel(None, move_Y)
+            # move cursor on X axis
+            move_X_final, move_x = self.digital_filter_cursor_X(move_X, speed_X)
+            pyautogui.moveRel(int(round(move_X_final)), None)
 
-            # debug to file
+            # move cursor on Y axis
+            move_Y_final, move_y = self.digital_filter_cursor_Y(move_Y, speed_Y)
+            pyautogui.moveRel(None, int(round(move_Y_final)))
+
+            # move detection for dwell click
+            if move_x or move_y:
+                self.move_detected = 1
+
+            ### CURSOR MOVEMENT ANALYSIS
+            # debug to file - slow and doesn't show all iterations
             #  f_move_X = open( 'log/move_X.txt', 'a' )
             #  f_move_X.write( 'move_X = ' + repr(int(move_X/speed)) + '\n' )
 
             #  f_move_Y = open( 'log/move_Y.txt', 'a' )
             #  f_move_Y.write( 'move_Y = ' + repr(int(move_Y/speed)) + '\n' )
             #  f_move_Y.close()
-
 
             #  print("move X:", int(move_X/speed))
             #  print("move Y:", move_Y)
@@ -511,9 +493,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 #  pyautogui.moveRel(move_X*speed_X, None)
             #  pyautogui.moveRel(move_X*speed_X, None)
 
-            move_X_final, move_x = self.digital_filter_cursor_X(move_X, speed_X)
-            pyautogui.moveRel(int(round(move_X_final)), None)
-
             #  print(noise_Y)
             #  if(noise_Y == 0):
                 #  #  self.filter_fsm(move_Y, speed)
@@ -522,134 +501,18 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  else:
                 #  pyautogui.moveRel(None, move_Y*speed_Y)
 
-            move_Y_final, move_y = self.digital_filter_cursor_Y(move_Y, speed_Y)
-            pyautogui.moveRel(None, int(round(move_Y_final)))
-
-            if move_x or move_y:
-                self.move_detected = 1
-
         #  object_detected = 1
 
         return move_X, move_Y
 
-    # FSM for filtering dihtering moves - Y
-    def filter_fsm_Y(self, move):
-        move_final = 0
-        print(self.state_Y)
 
-        # 0 self.state_Y
-        if(self.state_Y == 0):
-            if(abs(move) > 1):
-                #  pyautogui.moveRel(None, move*speed)
-                move_final = move
-            elif(move == 1):
-                self.state_Y = 1
-            elif(move == -1):
-                self.state_Y = -1
-
-        # 0 1
-        elif(self.state_Y == 1):
-            if(move == -1):
-                # 0 1 -1
-                #  f_move_Y = open( 'log/move_Y.txt', 'a' )
-                #  f_move_Y.write( 'filtered 0 1 -1' + '\n' )
-                print( 'Y filtered 0 -1 1' )
-                #  f_move_Y.close()
-                #  self.state_Y = 255
-                self.state_Y = 0
-                pass
-            else:
-                #  pyautogui.moveRel(None, (1+move)*speed)
-                move_final = 1 + move
-                self.state_Y = 0
-
-        # 0 -1
-        elif(self.state_Y == -1):
-            if(move == 1):
-                # 0 -1 1
-                #  f_move_Y = open( 'log/move_Y.txt', 'a' )
-                #  f_move_Y.write( 'filtered 0 -1 1' + '\n' )
-                print( 'Y filtered 0 -1 1' )
-                #  self.state_Y = 255
-                self.state_Y = 0
-                #  f_move_Y.close()
-                pass
-            else:
-                #  pyautogui.moveRel(None, (-1+move)*speed)
-                move_final = -1 + move
-                self.state_Y = 0
-
-        # 0 -1/1 1/-1 X - filter next input
-        elif(self.state_Y == 255):
-            self.state_Y = 0
-
-        #  print("FSM entered")
-        #  print(self.state_Y)
-        return move_final
-
-
-    # FSM for filtering dihtering moves - X
-    def filter_fsm_X(self, move):
-        move_final = 0
-        print(self.state_X)
-
-        # 0 self.state_X
-        if(self.state_X == 0):
-            if(abs(move) > 1):
-                #  pyautogui.moveRel(None, move*speed)
-                move_final = move
-            elif(move == 1):
-                self.state_X = 1
-            elif(move == -1):
-                self.state_X = -1
-
-        # 0 1
-        elif(self.state_X == 1):
-            if(move == -1):
-                # 0 1 -1
-                #  f_move_X = open( 'log/move_X.txt', 'a' )
-                #  f_move_X.write( 'filtered 0 1 -1' + '\n' )
-                print( 'X filtered 0 -1 1' )
-                #  f_move_X.close()
-                #  self.state_X = 255
-                self.state_X = 0
-                pass
-            else:
-                #  pyautogui.moveRel(None, (1+move)*speed)
-                move_final = 1 + move
-                self.state_X = 0
-
-        # 0 -1
-        elif(self.state_X == -1):
-            if(move == 1):
-                # 0 -1 1
-                #  f_move_X = open( 'log/move_X.txt', 'a' )
-                #  f_move_X.write( 'filtered 0 -1 1' + '\n' )
-                print( 'X filtered 0 -1 1' )
-                #  self.state_X = 255
-                self.state_X = 0
-                #  f_move_X.close()
-                pass
-            else:
-                #  pyautogui.moveRel(None, (-1+move)*speed)
-                move_final = -1 + move
-                self.state_X = 0
-
-        # 0 -1/1 1/-1 X - filter next input
-        elif(self.state_X == 255):
-            self.state_X = 0
-
-        #  print("FSM entered")
-        #  print(self.state_X)
-        return move_final
-
-
-    # Digital filter for cursor movement X
+    # digital filter for cursor movement X
     def digital_filter_cursor_X(self, dx, speed):
         # filter coefficients
         #  c = np.array([0.25, 0.25, 0.25, 0.25])
         #  c = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
         #  numtaps = 20
+        # get number of taps from GUI (Filter X)
         numtaps = self.filterSpinBox_X.value()
 
         # no filter
@@ -664,10 +527,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
             # shift in first element
             self.filter_cursor_X = np.append([dx], self.filter_cursor_X)
-            # delete last element
+            # delete last element - not needed (size = 100)
             #  self.filter_cursor_X = self.filter_cursor_X[:-1]
 
-            # calculate output value
+            # calculate output value - filter MAC (multiply-accumulate)
             x_out = 0
             for i in range(0, filter_size):
                 x_out = x_out + self.filter_cursor_X[i] * c[i]
@@ -688,35 +551,22 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         sum_X = sum(self.fine_control_X)
         #  print("X: "+str(sum_X))
 
-        # small movements
-
         #  print(np.size(self.fine_control_X))
         #  if(sum_X/np.size(self.fine_control_X) < 200):
+        # small cursor movements
         if(sum_X < 1500/5*2):
             x_out = x_out/2
             # use some OK default speed
             x_out = 15*x_out/1000
+        # fast cursor movements
         elif(sum_X > 4000/5*2):
-            #  y_out = 20*y_out/1000
             x_out = 2*speed*x_out/1000
+        # normal speed cursor movements
         else:
             # speed scale
             x_out = speed*x_out/1000
 
-        #  if(abs(x_out) > 1 and abs(x_out) < 5):
-        #  if(abs(x_out) < 400):
-            #  x_out = x_out/3.5
-        #  elif(abs(x_out) > 1000):
-            #  x_out = x_out*2.5
-        # fine movement
-        #  elif(abs(x_out) < 8):
-            #  x_out = x_out/2.5
-        # coarse movement speed up
-        #  elif(abs(x_out) > 12):
-        #  elif(abs(x_out) > 8):
-            #  x_out = x_out*2.5
-
-        # dwell click
+        # check if movement is greater than dwell threshold
         move = 0
         if(abs(x_out) > NK_DWELL_MOVE_THRESH):
             move = 1
@@ -724,12 +574,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         return x_out, move
 
 
-    # Digital filter for cursor movement Y
+    # digital filter for cursor movement Y
     def digital_filter_cursor_Y(self, dy, speed):
         # filter coefficients
         #  c = np.array([0.25, 0.25, 0.25, 0.25])
         #  c = 2*np.array([0.2, 0.2, 0.2, 0.2, 0.2])
         #  numtaps = 20
+        # get number of taps from GUI (Filter Y)
         numtaps = self.filterSpinBox_Y.value()
 
         # no filter
@@ -745,7 +596,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
             # shift in first element
             self.filter_cursor_Y = np.append([dy], self.filter_cursor_Y)
-            # delete last element
+            # delete last element - not needed (size = 100)
             #  self.filter_cursor_Y = self.filter_cursor_Y[:-1]
 
             # calculate output value
@@ -771,36 +622,20 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print("Y: "+str(sum_Y))
 
         # small movements
-
         if(sum_Y < 1000/5*2):
             y_out = y_out/2
             # use some OK default speed
             y_out = 25*y_out/1000
+        # fast cursor movements
         elif(sum_Y > 2000/5*2):
             #  y_out = 20*y_out/1000
             y_out = 2*speed*y_out/1000
+        # normal speed cursor movements
         else:
             # speed scale
             y_out = speed*y_out/1000
 
-        # small movements
-        #  if(abs(y_out) > 1 and abs(y_out) < 6):
-        #  if(abs(y_out) < 600):
-            #  y_out = y_out/3.5
-        #  elif(abs(y_out) > 1000):
-            #  y_out = y_out*2.5
-        # fine movement
-        #  elif(abs(y_out) < 8):
-            #  y_out = y_out/2.5
-        # coarse movement speed up
-        #  elif(abs(y_out) > 10):
-            #  y_out = y_out*2.5
-
-
-        # speed scale
-        #  y_out = speed*y_out/1000
-
-        # dwell click
+        # check if movement is greater than dwell threshold
         move = 0
         if(abs(y_out) > NK_DWELL_MOVE_THRESH):
             move = 1
@@ -811,11 +646,17 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     # save GUI state
     def save_gui(self):
         print("save_gui")
-        # located at "~/.config/webcam_cursor/config.cfg"
+
+        # linux - located at "~/.config/webcam_cursor/config.cfg"
+        # windows - located at "regedit -> HKEY_CURRENT_USER\Software\webcam_cursor\webcam_cursor"
+        # windows - located in binary file "%USER\NTUSER.DAT"
+
         # directory and filename for config file
         config = QSettings('webcam_cursor', 'webcam_cursor')
         #  config.beginGroup("./config.cfg")
+        # variable to check if config file exists
         config.setValue('number', 55)
+        # app version
         config.setValue('version', NK_VERSION)
         #  config.endGroup()
 
@@ -846,10 +687,15 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.save_gui()
         # report_session()
 
+
     # load GUI state
     def load_gui(self):
         print("load_gui")
-        # located at "~/.config/webcam_cursor/config.cfg"
+
+        # linux - located at "~/.config/webcam_cursor/config.cfg"
+        # windows - located at "regedit -> HKEY_CURRENT_USER\Software\webcam_cursor\webcam_cursor"
+        # windows - located in binary file "%USER\NTUSER.DAT"
+
         # directory and filename for config file
         config = QSettings('webcam_cursor', 'webcam_cursor')
         #  config.beginGroup("./config.cfg")
@@ -883,7 +729,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.filterSpinBox_Y.setValue( config.value('filter_Y', type=int) )
 
 
-# run app
+# run main GUI app
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     window = MyApp()
