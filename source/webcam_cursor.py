@@ -628,7 +628,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             y_out = 25*y_out/1000
         # fast cursor movements
         elif(sum_Y > 2000/5*2):
-            #  y_out = 20*y_out/1000
             y_out = 2*speed*y_out/1000
         # normal speed cursor movements
         else:
