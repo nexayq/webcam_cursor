@@ -18,15 +18,15 @@ import pyautogui
 
 # aruco
 from cv2 import aruco
-NK_ARUCO_ID = 43
 
 # apriltag - comment to reduce binary size
 #  import apriltag
 
-# temp for calculating FIR coefficients
+# for calculating FIR coefficients
 from scipy import signal
 
 # Constants
+NK_ARUCO_ID = 43
 NK_DWELL_MOVE_THRESH = 10
 NK_VERSION = '2.3'
 
@@ -37,7 +37,7 @@ pyautogui.FAILSAFE = False
 pyautogui.PAUSE = 0
 
 
-# pyinstaller workaround
+# pyinstaller workaround for file paths
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
@@ -66,10 +66,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # paint selected color to widget
-        self.colorSpinBox.valueChanged.connect(self.GetColor)
+        self.colorSpinBox.valueChanged.connect(self.get_color)
         color = self.colorSpinBox.value()
 
-        # set init color
+        # set init HSV color
         p = QtGui.QPalette()
         #  p.setColor(QtGui.QPalette.Window, QtGui.QColor.fromHsv(color, 178, 164))
         p.setColor(QtGui.QPalette.Window, QtGui.QColor.fromHsv(color, 255, 255))
@@ -79,11 +79,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         # load GUI settings from config file
         self.load_gui()
 
+        # try to open camera if present on system
         self.cap = cv2.VideoCapture(0)
         if self.cap is None or not self.cap.isOpened():
             msg = QtGui.QMessageBox()
             msg.setIcon(QtGui.QMessageBox.Warning)
             msg.setText("Unable to open Camera!")
+            print("Unable to open Camera!")
             msg.exec_()
 
         #  print(cv2.__version__[0])
@@ -92,44 +94,38 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  print("1280x720")
             #  self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH,1280)
             #  self.cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT,720)
-        #  self.get_frame()
-        self.run_timer()
-        # call custom function "CalculateTax" when button is clicked
-        #  self.calc_tax_button.clicked.connect(self.CalculateTax)
 
-        #  self.label_2.setGeometry(10, 10, 400, 100)
+        # run timers for capturing new frames and processing dwell time
+        self.frame_timer()
+
+        # show aruco picture from file in label
         self.labelArUco.setScaledContents(True)
-        #  self.label_2.setPixmap(QtGui.QPixmap.scaled(70, 50, Qt.KeepAspectRatio))
         self.labelArUco.setPixmap(QtGui.QPixmap(aruco_pic))
         self.labelArUco.show()
 
         # init variables
-        #  self.noise_X = 1
-        #  self.noise_Y = 1
+        # cursor movement
         self.cX_prev = 0
         self.cY_prev = 0
-        self.time_dwell_elapsed = 10000
         self.move_detected = 0
-        #  self.move_array_X = np.zeros(4)
-        #  self.i = 0
-        self.state_X = 0
-        self.state_Y = 0
+        # there is no delta_X/Y for first cursor movement
         self.first_data = 0
 
-        # filter cursor array inputs - max size
+        # filter cursor array inputs - max size=100
         self.filter_cursor_X = np.zeros(100)
         self.filter_cursor_Y = np.zeros(100)
 
+        # reduce movement speed for small cursor movements, analyze speed
         self.fine_control_X = np.zeros(2)
         self.fine_control_Y = np.zeros(2)
         #  self.fine_control_X = np.zeros(4)
         #  self.fine_control_Y = np.zeros(4)
 
-    # Custom function
-    def GetColor(self):
+
+    # get color from spinbox and apply it to widget
+    def get_color(self):
         color = self.colorSpinBox.value()
         #  print(color)
-        #  w = QtGui.QWidget()
         p = QtGui.QPalette()
         #  p.setColor(QtGui.QPalette.Window, Qt.black)
         #  p.setColor(QtGui.QPalette.Window, QtGui.QColor.fromHsv(120, 178, 164))
@@ -137,31 +133,23 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         p.setColor(QtGui.QPalette.Window, QtGui.QColor.fromHsv(color, 255, 255))
         self.colorWidget.setAutoFillBackground(True)
         self.colorWidget.setPalette(p)
-        #  p = QtGui.QPallete()
-        #  p.setColor(
-        #  p = w.palette()
-        #  p.setColor(w.backgroundRole(), QtGui.Qt.red())
-        #  w.setPallete(p)
-
-        #  price = int(self.price_box.toPlainText())
-        #  tax = (self.tax_rate.value())
-        #  total_price = price + ((tax/100)*price)
-        #  total_price_string = "The total price with tax is: " + str(total_price)
-        #  self.results_window.setText(total_price_string)
         return color
 
-    # run timer
-    def run_timer(self):
+
+    # run frame and dwell timer
+    def frame_timer(self):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.get_frame)
         self.timer.start(0.1)
 
+        # dwell timer
         self.timer_dwell = QTimer(self)
         self.timer_dwell.timeout.connect(self.check_move)
         #  self.timer_dwell.start(2000)
         self.timer_dwell.start(1800)
 
-    # check mouse movement
+
+    # check for mouse movement and click if there is no movement
     def check_move(self):
         checkbox_check = self.moveCursorCheckBox.checkState() and self.dwellClickCheckBox.checkState()
         if checkbox_check and (self.move_detected == 0):
@@ -170,10 +158,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             #  self.timer_dwell.start(1600)
         self.move_detected = 0
 
-    # start webcam
+
+    # main - capture frame and process them
     def get_frame(self):
-        #  cap = cv2.VideoCapture(0)
-        #  while True:
         _,frame = self.cap.read()
         #  cv2.imshow("Frame", frame)
 
@@ -183,49 +170,38 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print(index)
         #  print("Combo box: " + algorithm)
 
-        # change to be suitable for QImage
-        #  filtered_frame = self.follow_color(frame, color)
-        #  filtered_frame = frame
-        #  filtered_frame = filtered_frame.astype(np.uint8)
-        #  filtered_frame = filtered_frame.astype(np.uint8)
-        #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_BGR2RGB)
-        #  image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        #  print(type(filtered_frame))
-        #  print(filtered_frame.shape)
-        #  print(filtered_frame)
-        #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
-        #  gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # depending on algorithm selected do different processings
+        # track ArUco markers
         if(algorithm == "ArUco"):
             aruco_frame = self.detect_aruco(frame)
             #  aruco_frame = self.detect_apriltag(frame)
             image = cv2.cvtColor(aruco_frame, cv2.COLOR_BGR2RGB)
+        # track color
         elif(algorithm == "Color"):
             # range for OpenCV H is 0-180, range for Qt H is 0-360
-            color = self.GetColor()/2
+            color = self.get_color()/2
             #  color = int(color)
             #  print(color)
             filtered_frame = self.follow_color(frame, color)
             image = cv2.cvtColor(filtered_frame, cv2.COLOR_BGR2RGB)
+        # just show frame
         else:
             image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        #  filtered_frame = self.detect_object(gray_image)
-        #  image = cv2.cvtColor(gray_image, cv2.COLOR_GRAY2RGB)
-        #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_GRAY2RGB)
-        #  image = filtered_frame
-        #  image = cv2.cvtColor(filtered_frame, cv2.COLOR_HSV2RGB)
-    #  if image is not None:
+
+        # if image is not None:
+        # show frame from webcam in big Qlabel
         qimage = QtGui.QImage(image.data, image.shape[1], image.shape[0], QtGui.QImage.Format_RGB888)
         self.display_image(qimage)
 
 
-    # display image
+    # show frame from webcam
     def display_image(self, image):
         self.imageFrame.setPixmap(QtGui.QPixmap.fromImage(image))
         self.imageFrame.setScaledContents(True)
         #  self.imageFrame.show()
 
 
-    # detect aruco
+    # detect aruco markers
     def detect_aruco(self, frame):
         # dictionary - 4x4 aruco images
         aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_250)
