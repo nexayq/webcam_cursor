@@ -646,7 +646,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def save_gui(self):
         print("save_gui")
 
-        # linux - located at "~/.config/webcam_cursor/config.cfg"
+        # linux   - located at "~/.config/webcam_cursor/config.cfg"
         # windows - located at "regedit -> HKEY_CURRENT_USER\Software\webcam_cursor\webcam_cursor"
         # windows - located in binary file "%USER\NTUSER.DAT"
 
@@ -691,7 +691,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def load_gui(self):
         print("load_gui")
 
-        # linux - located at "~/.config/webcam_cursor/config.cfg"
+        # linux   - located at "~/.config/webcam_cursor/config.cfg"
         # windows - located at "regedit -> HKEY_CURRENT_USER\Software\webcam_cursor\webcam_cursor"
         # windows - located in binary file "%USER\NTUSER.DAT"
 
