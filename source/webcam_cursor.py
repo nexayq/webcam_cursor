@@ -76,9 +76,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.colorWidget.setAutoFillBackground(True)
         self.colorWidget.setPalette(p)
 
-        # load GUI settings from config file
-        self.load_gui()
-
         # try to open camera if present on system
         self.cap = cv2.VideoCapture(0)
         if self.cap is None or not self.cap.isOpened():
@@ -87,6 +84,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             msg.setText("Unable to open Camera!")
             print("Unable to open Camera!")
             msg.exec_()
+
+        # track what camera user wants to use
+        self.cameraSelectComboBox.currentIndexChanged.connect(self.select_camera)
+
+        # load GUI settings from config file
+        self.load_gui()
 
         #  print(cv2.__version__[0])
         if int(cv2.__version__[0]) < 3:
@@ -123,6 +126,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # connect "Dwell Click" checkbox checked and dwell timer reset
         self.dwellClickCheckBox.stateChanged.connect(self.reset_dwell_timer)
+
+
+    # select camera
+    def select_camera(self):
+        camera = self.cameraSelectComboBox.currentText()
+        self.cap = cv2.VideoCapture(int(camera))
+        return self.cap
 
 
     # get color from spinbox and apply it to widget
@@ -168,6 +178,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
     # main - capture frame and process them
     def get_frame(self):
+
+        # if camera is unavailable return error
+        if self.cap is None or not self.cap.isOpened():
+            return -1
+
+        # get frame from camera
         _,frame = self.cap.read()
         #  cv2.imshow("Frame", frame)
 
@@ -686,6 +702,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         config.setValue('filter_X', self.filterSpinBox_X.value())
         config.setValue('filter_Y', self.filterSpinBox_Y.value())
 
+        # camera
+        config.setValue('camera', self.cameraSelectComboBox.currentIndex())
+
 
     # when application closes save settings
     def closeEvent(self, event):
@@ -733,6 +752,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.filterSpinBox.setValue( config.value('filter_pixels', type=int) )
         self.filterSpinBox_X.setValue( config.value('filter_X', type=int) )
         self.filterSpinBox_Y.setValue( config.value('filter_Y', type=int) )
+
+        # camera
+        self.cameraSelectComboBox.setCurrentIndex( config.value('camera', type=int) )
 
 
 # run main GUI app
