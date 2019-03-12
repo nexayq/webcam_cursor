@@ -266,10 +266,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                 y = c[:, 1].mean()
 
                 # draw center point
-                draw_x1 = int(round(x))
-                draw_y1 = int(round(y))
-                draw_x2 = draw_x1 + 10
-                draw_y2 = draw_y1 + 10
+                draw_x1 = int(round(x))-5
+                draw_y1 = int(round(y))-5
+                draw_x2 = int(round(x))+5
+                draw_y2 = int(round(y))+5
                 frame_markers = cv2.rectangle(frame_markers,(draw_x1,draw_y1),(draw_x2,draw_y2),(0,255,0),3)
                 #  frame_markers = cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,0),3)
                 #  frame_markers = cv2.rectangle(median,(x1,y1),(x2,y2),(0,255,0),3)
