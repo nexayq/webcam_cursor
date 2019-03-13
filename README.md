@@ -106,9 +106,9 @@ Camera used in [video demo](https://www.youtube.com/watch?v=dbJvwXaWFdY&t=5m25s)
 
 You can check camera quality and read reviews online:
     https://webcamtests.com/
-    
+
 On Linux you can use **v4l2-utils** to test your camera quality:
-    
+
     $ sudo apt-get install v4l-utils    # for apt package manager (Debian/Ubuntu/Mint)
     $ v4l2-ctl --list-formats-ext       # show FPS for camera supported resolutions
         ...
