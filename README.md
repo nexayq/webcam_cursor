@@ -94,9 +94,33 @@ Tested on:
     $ python3 webcam_cursor.py
 
 
+# Web Camera
+
+Standard built in laptop cameras can be used with this application.
+
+If built in camera quality is exceptionally low (10 FPS at 640x480) then cursor movement will be choppy.
+
+In that case it is better to use some cheap USB camera (~20€).
+
+Camera used in [video demo](https://www.youtube.com/watch?v=dbJvwXaWFdY&t=5m25s) (0.92 MegaPixels) generates 30 FPS at 640x480 - built in webcam in laptop Toshiba Satellite L50-B (Toshiba Web Camera - HD)
+
+You can check camera quality and read reviews online:
+    https://webcamtests.com/
+    
+On Linux you can use **v4l2-utils** to test your camera quality:
+    
+    $ sudo apt-get install v4l-utils    # for apt package manager (Debian/Ubuntu/Mint)
+    $ v4l2-ctl --list-formats-ext       # show FPS for camera supported resolutions
+        ...
+        Size: Discrete 640x480
+            Interval: Discrete 0.033s (30.000 fps)
+        ...
+
+
 # License
 
 GPL-2.0
+
 
 [aruco_screenshot]:       https://github.com/nexayq/webcam_cursor/blob/master/data/screenshots/aruco_screenshot.png
 [color_screenshot]:       https://github.com/nexayq/webcam_cursor/blob/master/data/screenshots/color_screenshot.png
