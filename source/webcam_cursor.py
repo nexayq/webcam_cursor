@@ -28,7 +28,7 @@ from scipy import signal
 # Constants
 NK_ARUCO_ID = 43
 NK_DWELL_MOVE_THRESH = 10
-NK_VERSION = '2.3'
+NK_VERSION = '2.4'
 
 
 # disable closing of app when upper left corner is reached
