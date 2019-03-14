@@ -114,7 +114,7 @@ Camera used in [video demo](https://www.youtube.com/watch?v=dbJvwXaWFdY&t=5m25s)
 
 You can check camera quality and read reviews online:
     https://webcamtests.com/
-    
+
 To test FPS online (for some resolution which is probably different than 640x480) you can go to:
     https://www.onlinemictest.com/webcam-test/
 
@@ -126,12 +126,12 @@ On Linux you can use **v4l2-utils** to test your camera quality:
         Size: Discrete 640x480
             Interval: Discrete 0.033s (30.000 fps)
         ...
-        
+
 You can also use application **guvcview** to detect your FPS at custom resolution on Linux:
 
     $ sudo apt-get install guvcview                         # for apt package manager (Debian/Ubuntu/Mint)
     $ guvcview --device=/dev/video0 --resolution=640x480    # use /dev/video1 for second camera
-    
+
 
 Some cameras increase exposure and reduce FPS in low light conditions (dark). It is important to disable such features.
 
