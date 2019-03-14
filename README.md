@@ -102,11 +102,11 @@ If built in camera quality is exceptionally low (10 FPS at 640x480) then cursor 
 
 In that case it is better to use some cheap USB camera (~20€).
 
-Easiest way to test if camera performance is fine is just to run **Webcam Cursor**.
-
-Camera FPS (Frames Per Second) performance is the most important spec for **Webcam Cursor**.
+Easiest way to test if camera performance is fine - just run **Webcam Cursor** and see if cursor movement is continuous.
 
 If cursor movement is not continuous read text bellow.
+
+Camera FPS (Frames Per Second) performance is the most important spec for **Webcam Cursor**.
 
 Webcam Cursor uses 640x480 resolution so it is important to know camera FPS at 640x480.
 
