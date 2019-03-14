@@ -102,10 +102,21 @@ If built in camera quality is exceptionally low (10 FPS at 640x480) then cursor 
 
 In that case it is better to use some cheap USB camera (~20€).
 
+Easiest way to test if camera performance is fine is just to run **Webcam Cursor**.
+
+Camera FPS (Frames Per Second) performance is the most important spec for **Webcam Cursor**.
+
+If cursor movement is not continuous read text bellow.
+
+Webcam Cursor uses 640x480 resolution so it is important to know camera FPS at 640x480.
+
 Camera used in [video demo](https://www.youtube.com/watch?v=dbJvwXaWFdY&t=5m25s) (0.92 MegaPixels) generates 30 FPS at 640x480 - built in webcam in laptop Toshiba Satellite L50-B (Toshiba Web Camera - HD)
 
 You can check camera quality and read reviews online:
     https://webcamtests.com/
+    
+To test FPS online (for some resolution which is probably different than 640x480) you can go to:
+    https://www.onlinemictest.com/webcam-test/
 
 On Linux you can use **v4l2-utils** to test your camera quality:
 
@@ -115,6 +126,20 @@ On Linux you can use **v4l2-utils** to test your camera quality:
         Size: Discrete 640x480
             Interval: Discrete 0.033s (30.000 fps)
         ...
+        
+You can also use application **guvcview** to detect your FPS at custom resolution on Linux:
+
+    $ sudo apt-get install guvcview                         # for apt package manager (Debian/Ubuntu/Mint)
+    $ guvcview --device=/dev/video0 --resolution=640x480    # use /dev/video1 for second camera
+    
+
+Some cameras increase exposure and reduce FPS in low light conditions (dark). It is important to disable such features.
+
+On Linux you can use **guvcview** and uncheck **Exposure, Auto Priority**
+
+On Windows you can use camera software and turn off such features.
+
+For example uncheck **DirectLight** feature for Logitech cameras - [Turn off DirectLight feature](https://www.youtube.com/watch?v=v5H7x21apyE)
 
 
 # License
