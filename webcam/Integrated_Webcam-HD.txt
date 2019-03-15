@@ -1,0 +1,22 @@
+
+# Command
+> guvcview --device=/dev/video0
+
+# Image Controls
+Brightness:   0
+Contrast:     0
+Saturation:  64
+Hue:          0
+Temperature, Auto: "checked"
+Gamma:      100
+Power Line Frequency: 60 Hz
+Sharpness:   2
+Backlight Compensation: 3
+Exposure, Auto: "Aperture Priority Mode"
+Exposure, Auto Priority: "unchecked"
+
+# Video Controls
+Device: Integrated_Webcam_HD
+Frame Rate: 30/1 fps
+Resolution: 640x480
+Camera output: YUYV
