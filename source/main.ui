@@ -142,7 +142,7 @@
      <number>100</number>
     </property>
     <property name="value">
-     <number>20</number>
+     <number>12</number>
     </property>
    </widget>
    <widget class="QLabel" name="filterLabel">
@@ -258,7 +258,7 @@
      <number>100</number>
     </property>
     <property name="value">
-     <number>25</number>
+     <number>20</number>
     </property>
    </widget>
    <widget class="QComboBox" name="algorithmComboBox">
@@ -450,7 +450,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>
