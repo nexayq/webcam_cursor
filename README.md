@@ -52,7 +52,7 @@ H range is 0-360
 # Install
 
 ## Linux
-Download archive from Releases:  [webcam_cursor.tar.gz](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v2.4.1/webcam_cursor.tar.gz)
+Download archive from Releases:  [webcam_cursor.tar.gz](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v2.5/webcam_cursor.tar.gz)
 
 Extract **webcam_cursor.tar.gz** archive to some directory
 
@@ -63,7 +63,7 @@ Tested on:
 
 
 ## Windows
-Download archive from Releases:  [webcam_cursor.zip](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v2.4.1/webcam_cursor.zip)
+Download archive from Releases:  [webcam_cursor.zip](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v2.5/webcam_cursor.zip)
 
 Extract **webcam_cursor.zip** to some directory
 
