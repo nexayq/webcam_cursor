@@ -40,20 +40,29 @@ while True:
         gray = frame[:,:,0].astype(np.uint8)
 
         aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_250)
+        aruco_dict_one = aruco.Dictionary_create(1, 4)
+        #  img = np.ones([500,500])
+        #  img = np.full((500,500), 255, np.uint8)
+        #  img = aruco.drawMarker(aruco_dict,50,200)
+        img = aruco.drawMarker(aruco_dict_one,0,200)
+        #  cv2.imshow("Marker", img)
+
+
         parameters =  aruco.DetectorParameters_create()
+        #  corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict_one, parameters=parameters)
         corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
         #  frame_markers = gray
         #  frame_markers = aruco.drawDetectedMarkers(gray.copy(), corners, ids)
-        #  gray_markers = aruco.drawDetectedMarkers(gray.copy(), corners, ids)
+        gray_markers = aruco.drawDetectedMarkers(gray.copy(), corners, ids)
 
-        #  if ids is not None:
-            #  for i in range(len(ids)):
-                #  c = corners[i]
-                #  #  print("c[" + str(i) + "] = " + str(c[i]))
-                #  #  print("c[" + str(i) + "] = " + str(c[i]))
-                #  print("x = " + str(c[i][0][0]))
-                #  print("y = " + str(c[i][0][1]))
-                #  print("")
+        if ids is not None:
+            for i in range(len(ids)):
+                c = corners[i]
+                #  print("c[" + str(i) + "] = " + str(c[i]))
+                #  print("c[" + str(i) + "] = " + str(c[i]))
+                print("x = " + str(c[i][0][0]))
+                print("y = " + str(c[i][0][1]))
+                print("")
 
         #  frame_markers = frame
         #  if rejectedImgPoints:
@@ -73,8 +82,8 @@ while True:
         #  else:
             #  frame_markers = frame
 
-        cv2.imshow("Web cam input", gray)
-        #  cv2.imshow("Gray input", gray_markers)
+        #  cv2.imshow("Web cam input", gray)
+        cv2.imshow("Gray input", gray_markers)
 
         time.sleep(0.03)
         #  time.sleep(1)
