@@ -16,6 +16,8 @@ import cv2
 import numpy as np
 import pyautogui
 
+#  import math
+
 # aruco
 from cv2 import aruco
 
@@ -582,20 +584,25 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         sum_X = sum(self.fine_control_X)
         #  print("X: "+str(sum_X))
 
+        speed_final=speed*abs(sum_X)/(2*200)
+        #  print(speed_final)
+        #  print(sum_X)
+        x_out = speed_final*x_out/1000
+
         #  print(np.size(self.fine_control_X))
         #  if(sum_X/np.size(self.fine_control_X) < 200):
         # small cursor movements
-        if(sum_X < 1500/5*2):
-            x_out = x_out/2
-            # use some OK default speed
-            x_out = 15*x_out/1000
-        # fast cursor movements
-        elif(sum_X > 4000/5*2):
-            x_out = 2*speed*x_out/1000
-        # normal speed cursor movements
-        else:
-            # speed scale
-            x_out = speed*x_out/1000
+        #  if(sum_X < 1500/5*2):
+            #  x_out = x_out/2
+            #  # use some OK default speed
+            #  x_out = 15*x_out/1000
+        #  # fast cursor movements
+        #  elif(sum_X > 4000/5*2):
+            #  x_out = 2*speed*x_out/1000
+        #  # normal speed cursor movements
+        #  else:
+            #  # speed scale
+            #  x_out = speed*x_out/1000
 
         # check if movement is greater than dwell threshold
         move = 0
@@ -652,18 +659,24 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         sum_Y = sum(self.fine_control_Y)
         #  print("Y: "+str(sum_Y))
 
+        #  speed_final=math.exp(abs(sum_Y)/(2*200))
+        speed_final=speed*abs(sum_Y)/(2*200)
+        #  print(speed_final)
+        #  print(sum_Y)
+        y_out = speed_final*y_out/1000
+
         # small movements
-        if(sum_Y < 1000/5*2):
-            y_out = y_out/2
-            # use some OK default speed
-            y_out = 25*y_out/1000
-        # fast cursor movements
-        elif(sum_Y > 2000/5*2):
-            y_out = 2*speed*y_out/1000
-        # normal speed cursor movements
-        else:
-            # speed scale
-            y_out = speed*y_out/1000
+        #  if(sum_Y < 1000/5*2):
+            #  y_out = y_out/2
+            #  # use some OK default speed
+            #  y_out = 25*y_out/1000
+        #  # fast cursor movements
+        #  elif(sum_Y > 2000/5*2):
+            #  y_out = 2*speed*y_out/1000
+        #  # normal speed cursor movements
+        #  else:
+            #  # speed scale
+            #  y_out = speed*y_out/1000
 
         # check if movement is greater than dwell threshold
         move = 0
