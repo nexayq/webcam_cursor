@@ -5,15 +5,21 @@ import cv2
 #  from cv2 import aruco
 import apriltag
 import numpy as np
+import time
 
 frames = [None]*5
 #  frames = []
 
+image_data = np.zeros([480, 640])
+
 
 # get video input from web camera
 cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FPS, 60)
-print(cap.get(cv2.CAP_PROP_FPS))
+#  cap.set(cv2.CAP_PROP_FPS, 60)
+#  print(cap.get(cv2.CAP_PROP_FPS))
+
+cap.set(cv2.CAP_PROP_CONVERT_RGB, False)
+print( cap.get(cv2.CAP_PROP_CONVERT_RGB) )
 #  print(cap.get(3))
 #  cap.set(3,1280)
 #  cap.set(4,720)
@@ -36,7 +42,8 @@ idx = 0
 while True:
         _,frame = cap.read()
         #  print(frame)
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        #  gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = frame[:,:,0].astype(np.uint8)
         #  aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_250)
         #  parameters =  aruco.DetectorParameters_create()
         #  corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
@@ -46,21 +53,21 @@ while True:
         #  frames[int(idx%2)] = gray
         #  frames[0] = gray
         #  frames[1] = gray
-        frames[idx%5] = gray
+        #  frames[idx%5] = gray
         #  print(idx%2)
         #  frames[idx%2] = gray
         #  if idx % 5 == 0 and idx != 0:
             #  #  frames.append(gray)
             #  del frames[0]
-        if idx == 0:
-            frames[1] = gray
-            frames[2] = gray
-            frames[3] = gray
-            frames[4] = gray
-        idx = idx + 1
+        #  if idx == 0:
+            #  frames[1] = gray
+            #  frames[2] = gray
+            #  frames[3] = gray
+            #  frames[4] = gray
+        #  idx = idx + 1
 
         #  print(frames)
-        median = np.median(frames, axis=0).astype(dtype=np.uint8)
+        #  median = np.median(frames, axis=0).astype(dtype=np.uint8)
 
         detector = apriltag.Detector()
         #  result = detector.detect(median)
@@ -105,6 +112,7 @@ while True:
         #  cv2.imwrite(image_path, frame_markers)
         #  idx = idx + 1
         #  prev_frame = frame
+        time.sleep(0.03)
 
         key = cv2.waitKey(1)
         #  if key == 27:

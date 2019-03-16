@@ -76,7 +76,8 @@ while True:
         cv2.imshow("Web cam input", gray)
         #  cv2.imshow("Gray input", gray_markers)
 
-        time.sleep(0.01)
+        time.sleep(0.03)
+        #  time.sleep(1)
 
         key = cv2.waitKey(1)
         #  if key == 27:
