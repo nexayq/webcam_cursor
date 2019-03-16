@@ -85,6 +85,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             print("Unable to open Camera!")
             msg.exec_()
 
+        # get direct grayscale
+        #  self.cap.set(cv2.CAP_PROP_CONVERT_RGB, False)
+        #  print( self.cap.get(cv2.CAP_PROP_CONVERT_RGB) )
+
         # track what camera user wants to use
         self.cameraSelectComboBox.currentIndexChanged.connect(self.select_camera)
 
@@ -123,6 +127,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.fine_control_Y = np.zeros(2)
         #  self.fine_control_X = np.zeros(4)
         #  self.fine_control_Y = np.zeros(4)
+
+        #  self.image_data = np.zeros([480, 640])
 
         # connect "Dwell Click" checkbox checked and dwell timer reset
         self.dwellClickCheckBox.stateChanged.connect(self.reset_dwell_timer)
@@ -233,6 +239,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         # get gray picture
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        #  gray = frame[:,:,0].astype(np.uint8)
 
         # get aruco frames
         parameters =  aruco.DetectorParameters_create()
@@ -240,6 +247,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #  print(ids)
 
         # put aruco detected markers on top of colored frame (webcam input)
+        #  frame_markers = aruco.drawDetectedMarkers(gray.copy(), corners, ids)
         frame_markers = aruco.drawDetectedMarkers(frame.copy(), corners, ids)
 
         # get (x,y) center coordinates of aruco marker
