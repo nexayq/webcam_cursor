@@ -135,7 +135,7 @@ You can also use application **guvcview** to detect your FPS at custom resolutio
     $ guvcview --device=/dev/video0 --resolution=640x480    # use /dev/video1 for second camera
 
 
-Some cameras increase exposure and reduce FPS in low light conditions (dark). It is important to disable such features.
+Some cameras increase exposure and reduce FPS in low light conditions (dark). Disabling such features can increase your FPS in low light conditions.
 
 On Linux you can use **guvcview** and uncheck **Exposure, Auto Priority**
 
