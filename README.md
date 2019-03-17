@@ -112,6 +112,8 @@ Webcam Cursor uses 640x480 resolution so it is important to know camera FPS at 6
 
 Camera used in [video demo](https://www.youtube.com/watch?v=dbJvwXaWFdY&t=5m25s) (0.92 MegaPixels) generates 30 FPS at 640x480 - built in webcam in laptop Toshiba Satellite L50-B (Toshiba Web Camera - HD)
 
+App performance was good even with 15 FPS (640x480) during tests but it is recommended to have higher FPS.
+
 You can check camera quality and read reviews online:
     https://webcamtests.com/
 
