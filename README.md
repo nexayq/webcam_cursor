@@ -59,7 +59,7 @@ Extract **webcam_cursor.tar.gz** archive to some directory
 Execute **webcam_cursor.run** from file manager or terminal
 
 Tested on:
-**Ubuntu 16.04**, **Linux Mint 18.3**, **Ubuntu 18.04**, **Antergos 19.2**
+**Ubuntu 16.04**, **Linux Mint 18.3**, **Ubuntu 18.04**, **MX Linux 18.1**, **Antergos 19.2**  
 
 
 ## Windows
