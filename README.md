@@ -100,7 +100,9 @@ Standard built in laptop cameras can be used with this application.
 
 If built in camera quality is exceptionally low (10 FPS at 640x480) then cursor movement will be choppy.
 
-In that case it is better to use some cheap USB camera (~20€).
+In that case it is better to use some cheap USB camera (30€-40€).
+
+My recommendation is [**Logitech C270**](https://www.amazon.com/Logitech-Widescreen-designed-Calling-Recording/dp/B004FHO5Y6) - it works perfectly out of the box on Linux and Windows with this application.
 
 Easiest way to test if camera performance is fine - just run **Webcam Cursor** and see if cursor movement is continuous.
 
@@ -141,7 +143,7 @@ On Linux you can use **guvcview** and uncheck **Exposure, Auto Priority**
 
 On Windows you can use camera software and turn off such features.
 
-For example uncheck **DirectLight** feature for Logitech cameras - [Turn off DirectLight feature](https://www.youtube.com/watch?v=v5H7x21apyE)
+For example uncheck **DirectLight** feature for some of the Logitech cameras (no need for this on C270) - [Turn off DirectLight feature](https://www.youtube.com/watch?v=v5H7x21apyE)
 
 
 # License
