@@ -100,7 +100,7 @@ Standard built in laptop cameras can be used with this application.
 
 If built in camera quality is exceptionally low (10 FPS at 640x480) then cursor movement will be choppy.
 
-In that case it is better to use some cheap USB camera (30€-40€).
+In that case it is better to use some cheap USB camera (25€-40€).
 
 My recommendation is [**Logitech C270**](https://www.amazon.com/Logitech-Widescreen-designed-Calling-Recording/dp/B004FHO5Y6) - it works perfectly out of the box on Linux and Windows with this application.
 
