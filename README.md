@@ -59,7 +59,7 @@ Extract **webcam_cursor.tar.gz** archive to some directory
 Execute **webcam_cursor.run** from file manager or terminal
 
 Tested on:
-**Ubuntu 16.04**, **Linux Mint 18.3 / 22**, **Ubuntu 18.04 / 20.04 / 22.04 / 24.04 **, **MX Linux 18.1**, **Antergos 19.2**
+**Ubuntu 16.04**, **Linux Mint 18.3 / 22**, **Ubuntu 18.04 / 20.04 / 22.04 / 24.04**, **MX Linux 18.1**, **Antergos 19.2**
 
 **IMPORTANT NOTE: X11 display server is only supported, Wayland display server is not supported.**
 
