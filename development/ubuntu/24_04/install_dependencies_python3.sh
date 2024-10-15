@@ -2,12 +2,12 @@
 
 ### NOT TESTED !!! ###
 
-# numpy==1.21.5
+# numpy==1.26.4
 # opencv_python_headless==4.10.0.84
 # PyAutoGUI==0.9.41
 # # PyQt5==5.15.11
 # # PyQt5_sip==12.15.0
-# scipy==1.8.0
+# scipy==1.14.1
 
 
 # stop script if exit occurs
@@ -31,7 +31,7 @@ sudo apt install python3-xlib
 
 # NumPy
 # sudo apt install python3-numpy
-pip3 install numpy==1.21.5
+pip3 install numpy==1.26.4
 
 # OpenCV
 # sudo apt install python-opencv
@@ -56,6 +56,6 @@ pip3 install PyAutoGUI==0.9.41
 
 # Filtering
 # sudo apt install python3-scipy
-pip3 install scipy==1.8.0
+pip3 install scipy==1.14.1
 
 ### NOT TESTED !!! ###
