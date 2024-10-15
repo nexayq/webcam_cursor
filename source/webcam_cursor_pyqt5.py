@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
 
-# requirements
-# numpy==1.21.5
-# opencv_python_headless==4.10.0.84
-# PyAutoGUI==0.9.41
-# # PyQt5==5.15.11
-# # PyQt5_sip==12.15.0
-# scipy==1.8.0
-
 #  https://www.pythonforengineers.com/your-first-gui-app-with-python-and-pyqt/
 
 from __future__ import print_function, division
