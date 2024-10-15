@@ -27,8 +27,8 @@ pip3 install PyQt5==5.15.11
 pip3 install xlib==0.21
 
 # NumPy
-# pip3 install numpy==1.24.4 # Ubuntu 20.04 - Python 3.8.10
-pip3 install numpy==2.1.2
+pip3 install numpy==1.24.4 # Ubuntu 20.04 - Python 3.8.10
+# pip3 install numpy==2.1.2
 
 # OpenCV
 pip3 install opencv_python_headless==4.10.0.84
@@ -37,5 +37,5 @@ pip3 install opencv_python_headless==4.10.0.84
 pip3 install PyAutoGUI==0.9.41
 
 # Filtering
-# pip3 install scipy==1.10.1 # Ubuntu 20.04 - Python 3.8.10
-pip3 install scipy==1.14.1
+pip3 install scipy==1.10.1 # Ubuntu 20.04 - Python 3.8.10
+# pip3 install scipy==1.14.1
