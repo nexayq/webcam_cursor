@@ -1,4 +1,12 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
+
+# requirements
+# numpy==1.21.5
+# opencv_python_headless==4.10.0.84
+# PyAutoGUI==0.9.41
+# # PyQt5==5.15.11
+# # PyQt5_sip==12.15.0
+# scipy==1.8.0
 
 #  https://www.pythonforengineers.com/your-first-gui-app-with-python-and-pyqt/
 
@@ -162,7 +170,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.get_frame)
         #  self.timer.start(0.1)
-        self.timer.start(100)
+        #  self.timer.start(100)
+        self.timer.start(1)
 
         # dwell timer
         self.timer_dwell = QTimer(self)
@@ -241,7 +250,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def detect_aruco(self, frame):
         # dictionary - 4x4 aruco images
         #  aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_250)
-        aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_250)
+        #  aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_250)
+        aruco_dict = aruco.getPredefinedDictionary(aruco.DICT_4X4_250)
         #  aruco_dict = aruco.Dictionary(aruco.DICT_4X4_250)
         #  aruco_dict = aruco.generateCustomDictionary(43,4)
         #  print(aruco_dict)
@@ -251,9 +261,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         #  gray = frame[:,:,0].astype(np.uint8)
 
         # get aruco frames
-        parameters =  aruco.DetectorParameters_create()
-        corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+        #  parameters =  aruco.DetectorParameters_create()
+        parameters =  aruco.DetectorParameters()
+        #  corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+        detector = aruco.ArucoDetector(aruco_dict, parameters)
+        corners, ids, rejectedImgPoints = detector.detectMarkers(gray)
         #  print(ids)
+            #  https://stackoverflow.com/a/74975523
 
         # put aruco detected markers on top of colored frame (webcam input)
         #  frame_markers = aruco.drawDetectedMarkers(gray.copy(), corners, ids)
