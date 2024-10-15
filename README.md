@@ -62,9 +62,11 @@ Tested on:
 **Ubuntu 16.04**, **Linux Mint 18.3 / 22**, **Ubuntu 18.04 / 20.04 / 22.04 / 24.04 **, **MX Linux 18.1**, **Antergos 19.2**
 
 **IMPORTANT NOTE: X11 display server is only supported, Wayland display server is not supported.**
-You can check your currently used display server by reading environment variable:
-$ echo $XDG_SESSION_TYPE
 
+You can check your currently used display server by reading environment variable:
+```
+$ echo $XDG_SESSION_TYPE
+```
 
 ## Windows
 Download archive from Releases:  [webcam_cursor.zip](https://github.com/nexayq/webcam_cursor/releases/download/webcam_cursor_v2.5/webcam_cursor.zip)
