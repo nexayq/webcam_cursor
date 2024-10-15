@@ -59,7 +59,11 @@ Extract **webcam_cursor.tar.gz** archive to some directory
 Execute **webcam_cursor.run** from file manager or terminal
 
 Tested on:
-**Ubuntu 16.04**, **Linux Mint 18.3**, **Ubuntu 18.04**, **MX Linux 18.1**, **Antergos 19.2**
+**Ubuntu 16.04**, **Linux Mint 18.3 / 22**, **Ubuntu 18.04 / 20.04 / 22.04 / 24.04 **, **MX Linux 18.1**, **Antergos 19.2**
+
+**IMPORTANT NOTE: X11 display server is only supported, Wayland display server is not supported.**
+You can check your currently used display server by reading environment variable:
+$ echo $XDG_SESSION_TYPE
 
 
 ## Windows
@@ -74,8 +78,8 @@ Tested on:
 
 # Development
 
-## Ubuntu - install dependencies for development
-    $ cd development/ubuntu/
+## Ubuntu 18.04 - install dependencies for development
+    $ cd development/ubuntu/18_04/
 
     # for python2
     $ ./install_dependencies_python2.sh
@@ -83,8 +87,19 @@ Tested on:
     # or for python3
     $ ./install_dependencies_python3.sh
 
+## Ubuntu 20.04/22.04/24_04 - install dependencies for development
 
-## Run
+    # for Ubuntu 20.04
+    $ cd development/ubuntu/20_04/
+    # for Ubuntu 22.04
+    $ cd development/ubuntu/22_04/
+    # for Ubuntu 24.04
+    $ cd development/ubuntu/24_04/
+
+    $ ./install_venv.sh
+
+
+## Run - Ubuntu 18.04
     $ cd source/
 
     # for python2
@@ -92,6 +107,10 @@ Tested on:
 
     # for python3
     $ python3 webcam_cursor.py
+
+## Run - Ubuntu 20.04/22.04/24_04
+    $ cd source/
+    $ run_pyqt5.sh
 
 
 # Web Camera
@@ -139,7 +158,7 @@ You can also use application **guvcview** to detect your FPS at custom resolutio
 
 Some cameras increase exposure and reduce FPS in low light conditions (dark). Disabling such features can increase your FPS in low light conditions.
 
-On Linux you can use **guvcview** and uncheck **Exposure, Auto Priority**
+On Linux you can use **guvcview** and uncheck **Exposure, Auto Priority / Exposure, Dynamic Framerate**
 
 On Windows you can use camera software and turn off such features.
 
