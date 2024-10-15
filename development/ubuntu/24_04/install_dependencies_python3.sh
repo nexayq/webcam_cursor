@@ -18,6 +18,17 @@ set -x
 # pyton3 pip
 sudo apt install python3-pip
 
+# PyQt
+# sudo apt install python-qt4
+# sudo apt install python3-pyqt4
+sudo apt install python3-pyqt5
+# Tk
+# sudo apt install python3-tk
+# sudo apt install python3-dev
+
+# PyAutoGUI dependencies
+sudo apt install python3-xlib
+
 # NumPy
 # sudo apt install python3-numpy
 pip3 install numpy==1.21.5
@@ -29,18 +40,10 @@ pip3 install numpy==1.21.5
 pip3 install opencv_python_headless==4.10.0.84
 
 
-# PyQt
-# sudo apt install python-qt4
-# sudo apt install python3-pyqt4
-sudo apt install python3-pyqt5
-# Tk
-# sudo apt install python3-tk
-# sudo apt install python3-dev
-
 # PyAutoGUI
 # sudo apt install python-xlib
 # pip3 install xlib --user
-sudo apt install python3-xlib
+# sudo apt install python3-xlib
 # pip3 install pyautogui --user
 # pip3 install pyautogui==0.9.41 --user
 pip3 install PyAutoGUI==0.9.41
