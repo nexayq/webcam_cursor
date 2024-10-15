@@ -22,8 +22,9 @@ sleep 1
 
 # Install all dependencies
 cd webcam_cursor/development/ubuntu/24_04/
-source ./install_dependencies_python3.sh
+# source ./install_dependencies_python3.sh
+source ./install_venv.sh
 
 # Go to source directory
-cd ../../source/
+cd ../../../source/
 # python3 webcam_cursor_pyqt5.py
