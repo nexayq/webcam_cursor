@@ -79,7 +79,9 @@ Extract **webcam_cursor.zip** to some directory
 Run **webcam_cursor** (webcam_cursor.vbs) from File Explorer
 
 Tested on:
-**Windows 7**, **Windows 10**
+* **Windows 7**
+* **Windows 10**
+* **Windows 11**
 
 # Development
 
