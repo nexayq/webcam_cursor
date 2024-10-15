@@ -1,3 +1,4 @@
+.venv/
 sandbox/
 scripts/apriltag/images/
 distribution/
