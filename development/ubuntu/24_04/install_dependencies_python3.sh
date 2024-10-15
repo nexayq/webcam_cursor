@@ -31,7 +31,7 @@ sudo apt install python3-xlib
 
 # NumPy
 # sudo apt install python3-numpy
-pip3 install numpy==1.26.4
+pip3 install numpy==2.1.2
 
 # OpenCV
 # sudo apt install python-opencv
