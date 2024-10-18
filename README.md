@@ -65,6 +65,7 @@ Tested on:
 * **Antergos 19.2**
 
 **IMPORTANT NOTE: X11 display server is only supported, Wayland display server is not supported.**
+**Starting from Ubuntu 22.04 Wayland is the default display server for Ubuntu OS unfortunately**
 
 You can check your currently used display server by reading environment variable:
 ```
